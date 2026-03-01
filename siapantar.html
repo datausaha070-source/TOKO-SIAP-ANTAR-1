@@ -416,21 +416,18 @@ detail+
 "━━━━━━━━━━━━━━━━━━━━\n"+
 "💰 RINCIAN PEMBAYARAN\n"+
 "━━━━━━━━━━━━━━━━━━━━\n\n"+
-"Total Item   : "+totalItem+"\n"+
+""Total Item   : "+totalItem+"\n"+
 "Total Barang : Rp"+rupiah(total)+"\n"+
 "Ongkir       : Rp"+rupiah(ongkirFix)+"\n"+
 "TOTAL BAYAR  : Rp"+rupiah(totalBayar)+"\n\n"+
-"────────────────────\n"+
-"TOTAL BAYAR  : Rp"+Math.round(totalBayar).toLocaleString("id-ID")+"\n\n"+
-"━━━━━━━━━━━━━━━━━━━━\n"+
+"________________________________\n"+
 "📍 Titik Lokasi Pembeli\n"+
 "____________________________\n"+
 "Desa       : "+(window.namaDesa || "-")+"\n"+
 "Kecamatan  : "+(window.namaKecamatan || "-")+"\n"+
 linkMaps+"\n\n"+
 "⚠️ Mohon cek kembali detail pesanan sebelum diproses.\n"+
-"━━━━━━━━━━━━━━━━━━━━";
-
+"────────────────────────────";
  window.open(
    "https://wa.me/6282319264646?text="+encodeURIComponent(pesan),
    "_blank"
