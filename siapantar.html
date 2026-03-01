@@ -398,22 +398,34 @@ function proses(){
 
  let tanggal=new Date().toLocaleDateString("id-ID");
  let orderId=Date.now();
+let now = new Date();
+let jam = now.toLocaleTimeString("id-ID");
+let nomorHarian = now.getFullYear().toString().slice(-2) +
+                   (now.getMonth()+1).toString().padStart(2,'0') +
+                   now.getDate().toString().padStart(2,'0') +
+                   "-" +
+                   now.getHours().toString().padStart(2,'0') +
+                   now.getMinutes().toString().padStart(2,'0');
 if(!noWa || noWa.trim() == ""){
     alert("Silahkan isi nomor WhatsApp terlebih dahulu.");
     return;
 }
  let pesan =
 "━━━━━━━━━━━━━━━━━━━━\n"+
-"🧾 INVOICE PESANAN MASUK\n"+
+"🏪 TOKO SIAP ANTAR\n"+
+"━━━━━━━━━━━━━━━━━━━━\n"+
+"🧾 INVOICE PESANAN\n"+
 "━━━━━━━━━━━━━━━━━━━━\n\n"+
 
-"📌 ID Order: #"+orderId+"\n"+
-"📅 Tanggal: "+tanggal+"\n\n"+
+"🔢 No Order  : "+nomorHarian+"\n"+
+"📌 ID Sistem : #"+orderId+"\n"+
+"📅 Tanggal   : "+tanggal+"\n"+
+"🕒 Jam       : "+jam+"\n\n"+
 
 "👤 Nomor Pembeli:\n"+noWa+"\n\n"+
 
 "━━━━━━━━━━━━━━━━━━━━\n"+
-"📦 Detail Produk\n"+
+"📦 DETAIL PRODUK\n"+
 "━━━━━━━━━━━━━━━━━━━━\n\n"+
 detail+
 
@@ -428,7 +440,7 @@ detail+
 "TOTAL BAYAR  : Rp"+rupiah(totalBayar)+"\n\n"+
 
 "━━━━━━━━━━━━━━━━━━━━\n"+
-"📍 Titik Lokasi Pembeli\n"+
+"📍 LOKASI PENGIRIMAN\n"+
 "━━━━━━━━━━━━━━━━━━━━\n"+
 "Desa       : "+(window.namaDesa || "-")+"\n"+
 "Kecamatan  : "+(window.namaKecamatan || "-")+"\n"+
@@ -441,8 +453,10 @@ linkMaps+"\n\n"+
 "0046 0105 1342 504\n"+
 "a.n INA KHOZINATUL ASROR\n\n"+
 
+"Status : MENUNGGU TRANSFER\n"+
+"━━━━━━━━━━━━━━━━━━━━\n"+
 "⚠️ Mohon cek kembali pesanan Anda.\n"+
-"Jika sudah benar, silakan lakukan transfer sesuai total di atas.\n"+
+"Setelah transfer kirim bukti pembayaran ke admin.\n"+
 "━━━━━━━━━━━━━━━━━━━━";
  window.open(
    "https://wa.me/6282319264646?text="+encodeURIComponent(pesan),
