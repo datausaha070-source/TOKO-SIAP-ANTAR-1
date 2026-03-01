@@ -433,7 +433,22 @@ linkMaps+"\n\n"+
    "_blank"
  );
 }
+// ================= BALAS OTOMATIS KE PEMBELI =================
 
+let noPembeli = noWa.replace(/^0/, "62");
+
+let pesanBalasan =
+"Halo 👋\n\n"+
+"Pesanan Anda sudah kami terima.\n"+
+"Admin akan segera memproses pesanan Anda.\n\n"+
+"Terima kasih telah berbelanja 🙏";
+
+setTimeout(function(){
+  window.open(
+    "https://wa.me/"+noPembeli+"?text="+encodeURIComponent(pesanBalasan),
+    "_blank"
+  );
+}, 2000);
 
 // ================= SCROLL =================
 function scrollToTop(){
