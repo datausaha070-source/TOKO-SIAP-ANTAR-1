@@ -183,6 +183,122 @@ function checkout(){
 }
 
 renderCart();
+function prosesCheckout(){
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+if(cart.length==0){
+ alert("Keranjang masih kosong");
+ return;
+}
+
+let noWa = document.getElementById("waPembeli").value.trim();
+if(!noWa){
+ alert("Isi nomor WhatsApp dulu");
+ return;
+}
+
+// ================= HITUNG TOTAL =================
+let total=0;
+let totalItem=0;
+let detail="";
+
+cart.forEach(p=>{
+ let sub = p.harga * p.qty;
+ total += sub;
+ totalItem += p.qty;
+
+ detail +=
+ "• "+p.nama+"\n"+
+ "  Qty: "+p.qty+"\n"+
+ "  Harga: Rp"+rupiah(sub)+"\n\n";
+});
+
+// contoh ongkir (nanti bisa kamu sambung dari sistem map)
+let ongkir = window.ongkirFix || 0;
+let totalBayar = total + ongkir;
+
+// ================= DATA TANGGAL =================
+let now = new Date();
+
+let tanggal = now.toLocaleDateString("id-ID");
+let jam = now.toLocaleTimeString("id-ID");
+
+let nomorHarian =
+ now.getFullYear().toString().slice(-2) +
+ (now.getMonth()+1).toString().padStart(2,'0') +
+ now.getDate().toString().padStart(2,'0') +
+ "-" +
+ now.getHours().toString().padStart(2,'0') +
+ now.getMinutes().toString().padStart(2,'0');
+
+let orderId = Date.now();
+
+// ================= LINK MAP =================
+let linkMaps = "";
+if(window.tujuanLat && window.tujuanLng){
+ linkMaps =
+ "https://www.google.com/maps/search/?api=1&query="
+ +window.tujuanLat+","+window.tujuanLng;
+}
+
+// ================= FORMAT PESAN =================
+let pesan =
+"━━━━━━━━━━━━━━━━━━━━\n"+
+"🏪 TOKO SIAP ANTAR\n"+
+"━━━━━━━━━━━━━━━━━━━━\n"+
+"🧾 INVOICE PESANAN\n"+
+"━━━━━━━━━━━━━━━━━━━━\n\n"+
+
+"🔢 No Order  : "+nomorHarian+"\n"+
+"📌 ID Sistem : #"+orderId+"\n"+
+"📅 Tanggal   : "+tanggal+"\n"+
+"🕒 Jam       : "+jam+"\n\n"+
+
+"👤 Nomor Pembeli:\n"+noWa+"\n\n"+
+
+"━━━━━━━━━━━━━━━━━━━━\n"+
+"📦 DETAIL PRODUK\n"+
+"━━━━━━━━━━━━━━━━━━━━\n\n"+
+detail+
+
+"━━━━━━━━━━━━━━━━━━━━\n"+
+"💰 RINCIAN PEMBAYARAN\n"+
+"━━━━━━━━━━━━━━━━━━━━\n\n"+
+
+"Total Item   : "+totalItem+" pcs\n"+
+"Total Barang : Rp"+rupiah(total)+"\n"+
+"Ongkir       : Rp"+rupiah(ongkir)+"\n"+
+"────────────────────\n"+
+"TOTAL BAYAR  : Rp"+rupiah(totalBayar)+"\n\n"+
+
+"━━━━━━━━━━━━━━━━━━━━\n"+
+"📍 LOKASI PENGIRIMAN\n"+
+"━━━━━━━━━━━━━━━━━━━━\n"+
+"Desa       : "+(window.namaDesa || "-")+"\n"+
+"Kecamatan  : "+(window.namaKecamatan || "-")+"\n"+
+linkMaps+"\n\n"+
+
+"━━━━━━━━━━━━━━━━━━━━\n"+
+"🏦 INFORMASI TRANSFER\n"+
+"━━━━━━━━━━━━━━━━━━━━\n"+
+"Bank BRI\n"+
+"0046 0105 1342 504\n"+
+"a.n INA KHOZINATUL ASROR\n\n"+
+
+"Status : MENUNGGU TRANSFER\n"+
+"━━━━━━━━━━━━━━━━━━━━\n"+
+"⚠️ Mohon cek kembali pesanan Anda.\n"+
+"Setelah transfer kirim bukti pembayaran ke admin.\n"+
+"━━━━━━━━━━━━━━━━━━━━";
+
+// ================= KIRIM WA ADMIN =================
+window.open(
+ "https://wa.me/62895707182299?text="+encodeURIComponent(pesan),
+ "_blank"
+);
+
+}
 
 </script>
 
