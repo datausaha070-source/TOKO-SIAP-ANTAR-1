@@ -9,17 +9,17 @@
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <style>
-body{font-family:Arial;margin:0;background:#f2f2f2;padding-bottom:160px}
+body{font-family:Arial;margin:0;background:#f2f2f2;padding-bottom:170px}
 header{background:#15803d;color:white;padding:15px;text-align:center;font-weight:bold}
-.card{background:white;margin:10px;padding:12px;border-radius:10px}
+.card{background:white;margin:10px;padding:12px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.1)}
 .harga{color:#15803d;font-weight:bold}
-button{padding:6px 12px;border:none;border-radius:6px;margin:3px}
+button{padding:6px 12px;border:none;border-radius:6px;margin:3px;cursor:pointer}
 .green{background:#15803d;color:white}
 .gray{background:#9ca3af;color:white}
-#map{height:250px;margin:10px;border-radius:10px}
+#map{height:260px;margin:10px;border-radius:10px}
+input{width:95%;margin:10px;padding:10px;border-radius:8px;border:1px solid #ccc}
 .checkout{position:fixed;bottom:60px;width:100%;background:#15803d;color:white;padding:15px;text-align:center;font-weight:bold}
 .clearBtn{position:fixed;bottom:0;width:100%;background:#9ca3af;color:white;padding:15px;text-align:center;font-weight:bold}
-input{width:95%;margin:10px;padding:10px;border-radius:8px;border:1px solid #ccc}
 </style>
 </head>
 <body>
@@ -41,20 +41,12 @@ input{width:95%;margin:10px;padding:10px;border-radius:8px;border:1px solid #ccc
 
 <script>
 
+// ================= DATA CART =================
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-const tokoLat=-6.883831;
-const tokoLng=108.302788;
+function rupiah(a){ return Math.round(a).toLocaleString("id-ID"); }
 
-let tujuanLat=null;
-let tujuanLng=null;
-let ongkir=0;
-let namaDesa="-";
-let namaKecamatan="-";
-
-function rupiah(a){return Math.round(a).toLocaleString("id-ID");}
-
-// ================= TAMPILKAN CART =================
+// ================= RENDER CART =================
 function renderCart(){
  let list=document.getElementById("cartList");
  list.innerHTML="";
@@ -66,13 +58,13 @@ function renderCart(){
 
   list.innerHTML+=`
   <div class="card">
-  <b>${p.nama}</b><br>
-  <span class="harga">Rp ${rupiah(p.harga)}</span><br>
-  <button onclick="kurang(${i})">-</button>
-  ${p.qty}
-  <button onclick="tambah(${i})">+</button>
-  <button onclick="hapus(${i})">Hapus</button>
-  <br>Subtotal: Rp ${rupiah(sub)}
+   <b>${p.nama}</b><br>
+   <span class="harga">Rp ${rupiah(p.harga)}</span><br>
+   <button onclick="kurang(${i})">-</button>
+   ${p.qty}
+   <button onclick="tambah(${i})">+</button>
+   <button onclick="hapus(${i})">Hapus</button>
+   <br>Subtotal: Rp ${rupiah(sub)}
   </div>`;
  });
 
@@ -89,6 +81,12 @@ function renderCart(){
  </div>`;
 }
 
+function tambah(i){ cart[i].qty++; simpan(); }
+function kurang(i){ cart[i].qty--; if(cart[i].qty<=0) cart.splice(i,1); simpan(); }
+function hapus(i){ cart.splice(i,1); simpan(); }
+function kosongkan(){ localStorage.removeItem("cart"); location.reload(); }
+function simpan(){ localStorage.setItem("cart",JSON.stringify(cart)); renderCart(); }
+
 // ================= MAP =================
 const tokoLat=-6.883831;
 const tokoLng=108.302788;
@@ -96,48 +94,37 @@ const tokoLng=108.302788;
 let tujuanLat=null;
 let tujuanLng=null;
 let ongkir=0;
-let jarakFix=0;
+let namaDesa="-";
+let namaKecamatan="-";
 let markerUser=null;
 
 var map=L.map('map').setView([tokoLat,tokoLng],15);
 
-// ===== Layer Normal
 var normalLayer = L.tileLayer(
- 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
- { attribution:'&copy; OpenStreetMap contributors' }
+ 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 ).addTo(map);
 
-// ===== Layer Satelit
 var satelliteLayer = L.tileLayer(
- 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
- { attribution:'Tiles © Esri' }
+ 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
 );
 
-// ===== Layer Label
 var labelLayer = L.tileLayer(
  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
- { opacity:0.6 }
+ {opacity:0.6}
 );
 
-// ===== Tombol Pilih Layer
 L.control.layers({
  "Normal": normalLayer,
  "Satelit": satelliteLayer,
  "Satelit + Nama": L.layerGroup([satelliteLayer,labelLayer])
 }).addTo(map);
 
-// Marker toko
-L.marker([tokoLat,tokoLng])
-.addTo(map)
-.bindPopup("Lokasi Toko")
-.openPopup();
+L.marker([tokoLat,tokoLng]).addTo(map).bindPopup("Lokasi Toko").openPopup();
 
-// Klik map
 map.on('click',function(e){
  setLokasi(e.latlng.lat,e.latlng.lng);
 });
 
-// Gunakan GPS
 function gunakanLokasi(){
  navigator.geolocation.getCurrentPosition(
   function(pos){
@@ -146,81 +133,53 @@ function gunakanLokasi(){
   function(err){
    alert("Gagal ambil lokasi: "+err.message);
   },
-  {
-   enableHighAccuracy:true,
-   timeout:15000,
-   maximumAge:0
-  }
+  {enableHighAccuracy:true,timeout:20000,maximumAge:0}
  );
 }
 
 function setLokasi(lat,lng){
-
- tujuanLat = lat;
- tujuanLng = lng;
+ tujuanLat=lat;
+ tujuanLng=lng;
 
  if(markerUser) map.removeLayer(markerUser);
 
- markerUser = L.marker([lat,lng])
- .addTo(map)
+ markerUser=L.marker([lat,lng]).addTo(map)
  .bindPopup("Lokasi Pengiriman")
  .openPopup();
 
  map.setView([lat,lng],17);
 
- ambilAlamat();
-}
-
-// ================= AMBIL ALAMAT =================
-function ambilAlamat(){
-
- fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${tujuanLat}&lon=${tujuanLng}`)
- .then(res => res.json())
- .then(data => {
-
-   window.namaDesa =
-     data.address.village ||
-     data.address.hamlet ||
-     data.address.suburb ||
-     "-";
-
-   window.namaKecamatan =
-     data.address.subdistrict ||
-     data.address.county ||
-     "-";
-
+ fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+ .then(res=>res.json())
+ .then(data=>{
+   namaDesa=data.address.village || data.address.hamlet || data.address.suburb || "-";
+   namaKecamatan=data.address.subdistrict || data.address.county || "-";
    hitungOngkir();
  });
 }
 
-// ================= HITUNG ONGKIR =================
 function hitungOngkir(){
+ let jarak=map.distance([tokoLat,tokoLng],[tujuanLat,tujuanLng])/1000;
+ ongkir=Math.round(jarak*2000);
+ if(ongkir<10000) ongkir=10000;
 
- jarakFix = map.distance(
-  [tokoLat,tokoLng],
-  [tujuanLat,tujuanLng]
- )/1000;
+ renderCart();
 
- ongkir = Math.round(jarakFix * 2000);
- if(ongkir < 10000) ongkir = 10000;
-
- renderCart(); // update total + ongkir realtime
-
- document.getElementById("infoZona").innerHTML =
- "Jarak: "+jarakFix.toFixed(1)+" km<br>"+
+ document.getElementById("infoZona").innerHTML=
+ "Jarak: "+jarak.toFixed(1)+" km<br>"+
  "Ongkir: Rp"+rupiah(ongkir)+"<br>"+
- "Desa: "+(window.namaDesa || "-")+"<br>"+
- "Kecamatan: "+(window.namaKecamatan || "-");
+ "Desa: "+namaDesa+"<br>"+
+ "Kecamatan: "+namaKecamatan;
 }
 
 // ================= CHECKOUT =================
 function checkout(){
 
- if(cart.length==0){alert("Keranjang kosong");return;}
- if(!tujuanLat){alert("Pilih lokasi dulu");return;}
+ if(cart.length==0){ alert("Keranjang kosong"); return; }
+ if(!tujuanLat){ alert("Pilih lokasi dulu"); return; }
 
  let noWa=document.getElementById("waPembeli").value.trim();
- if(!noWa){alert("Isi nomor WA dulu");return;}
+ if(!noWa){ alert("Isi nomor WA dulu"); return; }
 
  let total=0,totalItem=0,detail="";
  cart.forEach(p=>{
@@ -231,9 +190,9 @@ function checkout(){
  });
 
  let totalBayar=total+ongkir;
-
  let now=new Date();
  let orderId=Date.now();
+
  let nomorHarian=
  now.getFullYear().toString().slice(-2)+
  (now.getMonth()+1).toString().padStart(2,'0')+
@@ -287,5 +246,6 @@ detail+
 
 renderCart();
 </script>
+
 </body>
 </html>
