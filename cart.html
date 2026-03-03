@@ -22,6 +22,7 @@ input{width:95%;margin:10px;padding:10px;border-radius:8px;border:1px solid #ccc
 .clearBtn{position:fixed;bottom:0;width:100%;background:#9ca3af;color:white;padding:15px;text-align:center;font-weight:bold}
 </style>
 </head>
+
 <body>
 
 <header>🛒 Keranjang Belanja</header>
@@ -87,10 +88,10 @@ function renderCart(){
   list.innerHTML += `
   <div class="card">
     <b>Total Barang : Rp ${rupiah(total)}</b><br>
-    <b>Ongkir       : Rp ${rupiah(ongkir)}</b><br>
+    <b>Ongkir : Rp ${rupiah(ongkir)}</b>
     <hr>
     <b style="color:#15803d;font-size:18px">
-      TOTAL BAYAR : Rp ${rupiah(totalBayar)}
+    TOTAL BAYAR : Rp ${rupiah(totalBayar)}
     </b>
   </div>`;
 }
@@ -102,96 +103,63 @@ function kosongkan(){ localStorage.removeItem("cart"); location.reload(); }
 function simpan(){ localStorage.setItem("cart",JSON.stringify(cart)); renderCart(); }
 
 // ================= MAP =================
+var map = L.map('map').setView([tokoLat,tokoLng],15);
 
-const tokoLat = -6.883831;
-const tokoLng = 108.302788;
-
-let markerUser = null;
-let namaDesa = "-";
-let namaKecamatan = "-";
-
-var map = L.map('map').setView([tokoLat, tokoLng], 15);
-
-// 🗺️ NORMAL (dengan nama kota)
+// Normal
 var normalLayer = L.tileLayer(
- 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
- {maxZoom:19}
-).addTo(map);
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+{maxZoom:19}).addTo(map);
 
-// 🛰️ SATELIT
+// Satelit
 var satelliteLayer = L.tileLayer(
- 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
- {maxZoom:19}
-);
+'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+{maxZoom:19});
 
-// 🏷️ LABEL NAMA KOTA
-var labelLayer = L.tileLayer(
- 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
- {maxZoom:19, opacity:0.4}
-);
+// Satelit + Label
+var satelliteWithLabel = L.layerGroup([satelliteLayer]);
 
-// 🛰️ SATELIT + NAMA
-var satelliteWithLabel = L.layerGroup([satelliteLayer, labelLayer]);
-
-// 🎛️ CONTROL PILIHAN PETA
 L.control.layers({
- "🗺️ Peta Normal": normalLayer,
- "🛰️ Satelit": satelliteLayer,
- "🛰️ Satelit + Nama": satelliteWithLabel
+"Peta Normal":normalLayer,
+"Satelit":satelliteLayer,
+"Satelit + Nama":satelliteWithLabel
 }).addTo(map);
 
-// 📍 Marker toko
-L.marker([tokoLat, tokoLng])
- .addTo(map)
- .bindPopup("Lokasi Toko")
- .openPopup();
+L.marker([tokoLat,tokoLng]).addTo(map).bindPopup("Lokasi Toko").openPopup();
 
-// Klik map
-map.on('click', function(e){
- setLokasi(e.latlng.lat, e.latlng.lng);
+map.on('click',function(e){
+  setLokasi(e.latlng.lat,e.latlng.lng);
 });
 
-// Tombol gunakan lokasi
 function gunakanLokasi(){
- navigator.geolocation.getCurrentPosition(
-  function(pos){
-   setLokasi(pos.coords.latitude, pos.coords.longitude);
-  },
-  function(err){
-   alert("Gagal ambil lokasi: " + err.message);
-  },
-  {enableHighAccuracy:true}
- );
+  navigator.geolocation.getCurrentPosition(function(pos){
+    setLokasi(pos.coords.latitude,pos.coords.longitude);
+  });
 }
 
 function setLokasi(lat,lng){
- tujuanLat = lat;
- tujuanLng = lng;
+  tujuanLat = lat;
+  tujuanLng = lng;
 
- if(markerUser) map.removeLayer(markerUser);
+  if(markerUser) map.removeLayer(markerUser);
 
- markerUser = L.marker([lat,lng])
- .addTo(map)
- .bindPopup("Lokasi Pengiriman")
- .openPopup();
+  markerUser = L.marker([lat,lng])
+  .addTo(map)
+  .bindPopup("Lokasi Pengiriman")
+  .openPopup();
 
- map.setView([lat,lng],17);
+  map.setView([lat,lng],17);
 
- fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
- .then(res=>res.json())
- .then(data=>{
-   namaDesa = data.address.village || data.address.hamlet || data.address.suburb || "-";
-   namaKecamatan = data.address.subdistrict || data.address.county || "-";
-   hitungOngkir();
- });
+  fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+  .then(res=>res.json())
+  .then(data=>{
+    namaDesa = data.address.village || data.address.suburb || "-";
+    namaKecamatan = data.address.subdistrict || data.address.county || "-";
+    hitungOngkir();
+  });
 }
 
 function hitungOngkir(){
-
-  jarakFix = map.distance(
-    [tokoLat,tokoLng],
-    [tujuanLat,tujuanLng]
-  ) / 1000;
+  jarakFix = map.distance([tokoLat,tokoLng],[tujuanLat,tujuanLng]) / 1000;
 
   ongkir = Math.round(jarakFix * 2000);
   if(ongkir < 10000) ongkir = 10000;
@@ -202,59 +170,39 @@ function hitungOngkir(){
   else if(jarakFix <= 40) minimalBelanja = 500000;
   else minimalBelanja = 700000;
 
-  renderCart();
-
   document.getElementById("infoZona").innerHTML =
-    "Jarak: " + jarakFix.toFixed(1) + " km<br>" +
-    "Ongkir: Rp" + rupiah(ongkir) + "<br>" +
-    "Minimal Belanja: Rp" + rupiah(minimalBelanja) + "<br>" +
-    "Desa: " + namaDesa + "<br>" +
-    "Kecamatan: " + namaKecamatan;
+  "Jarak: "+jarakFix.toFixed(1)+" km<br>"+
+  "Ongkir: Rp "+rupiah(ongkir)+"<br>"+
+  "Minimal Belanja: Rp "+rupiah(minimalBelanja)+"<br>"+
+  "Desa: "+namaDesa+"<br>"+
+  "Kecamatan: "+namaKecamatan;
+
+  renderCart();
 }
 
 // ================= CHECKOUT =================
 function checkout(){
 
-  if(cart.length === 0){
-    alert("Keranjang kosong");
+  if(cart.length===0){ alert("Keranjang kosong"); return; }
+  if(!tujuanLat){ alert("Pilih lokasi dulu"); return; }
+
+  let total=0;
+  cart.forEach(p=> total += p.harga*p.qty);
+
+  if(minimalBelanja>0 && total<minimalBelanja){
+    alert("Minimal belanja Rp "+rupiah(minimalBelanja));
     return;
   }
 
-  if(!tujuanLat){
-    alert("Pilih lokasi dulu");
-    return;
-  }
+  let noWa=document.getElementById("waPembeli").value.trim();
+  if(!noWa){ alert("Isi nomor WA dulu"); return; }
 
-  let total = 0;
-  let totalItem = 0;
-
+  let detail="";
   cart.forEach(p=>{
-    total += p.harga * p.qty;
-    totalItem += p.qty;
+    detail+=p.nama+" x"+p.qty+" = Rp "+rupiah(p.harga*p.qty)+"\n";
   });
 
-  if(minimalBelanja > 0 && total < minimalBelanja){
-    alert("Minimal belanja Rp" + rupiah(minimalBelanja));
-    return;
-  }
-
-  let noWa = document.getElementById("waPembeli").value.trim();
-  if(!noWa){
-    alert("Isi nomor WA dulu");
-    return;
-  }
-
-  let detail = "";
-  cart.forEach(p=>{
-    let sub = p.harga * p.qty;
-    detail +=
-      "• " + p.nama + "\n" +
-      "  Qty: " + p.qty + "\n" +
-      "  Harga: Rp" + rupiah(sub) + "\n\n";
-  });
-
-  let totalBayar = total + ongkir;
-
+  let totalBayar=total+ongkir;
   let pesan =
 "━━━━━━━━━━━━━━━━━━━━\n"+
 "🏪 TOKO SIAP ANTAR\n"+
