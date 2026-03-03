@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Keranjang</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{font-family:Arial;margin:0;background:#f2f2f2}
+header{background:#15803d;color:white;padding:15px;text-align:center}
+.card{background:white;margin:10px;padding:12px;border-radius:10px}
+button{background:#15803d;color:white;border:none;padding:10px;width:100%;margin-top:10px;border-radius:6px}
+</style>
+</head>
+
+<body>
+
+<header>🛒 Keranjang Belanja</header>
+
+<div id="cartList"></div>
+
+<input type="text" id="wa" placeholder="Nomor WA">
+
+<button onclick="checkout()">Checkout WhatsApp</button>
+
+<script>
+
+function rupiah(a){ return Math.round(a).toLocaleString("id-ID"); }
+
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
+let total=0;
+let html="";
+
+cart.forEach(p=>{
+ let sub=p.qty*p.harga;
+ total+=sub;
+
+ html+=`
+ <div class="card">
+  <b>${p.nama}</b><br>
+  ${p.qty} x Rp ${rupiah(p.harga)}<br>
+  <b>Rp ${rupiah(sub)}</b>
+ </div>
+ `;
+});
+
+html+=`<div class="card"><b>Total: Rp ${rupiah(total)}</b></div>`;
+document.getElementById("cartList").innerHTML=html;
+
+function checkout(){
+ let wa=document.getElementById("wa").value;
+ let pesan="Pesanan:\n";
+
+ cart.forEach(p=>{
+  pesan+=p.nama+" x"+p.qty+"\n";
+ });
+
+ pesan+="\nTotal: Rp "+rupiah(total);
+
+ window.open(
+  "https://wa.me/62895707182299?text="+encodeURIComponent(pesan),
+  "_blank"
+ );
+}
+
+</script>
+</body>
+</html>
