@@ -6,33 +6,55 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-body{font-family:Arial;margin:0;background:#f2f2f2;padding-bottom:80px}
-header{background:#15803d;color:white;padding:15px;text-align:center;font-weight:bold}
+body{
+  font-family:Arial;
+  margin:0;
+  background:#f2f2f2;
+  padding-bottom:80px;
+}
+header{
+  background:#15803d;
+  color:white;
+  padding:15px;
+  text-align:center;
+  font-weight:bold;
+  font-size:18px;
+}
 .card{
- background:white;
- margin:10px;
- padding:12px;
- border-radius:10px;
- box-shadow:0 2px 6px rgba(0,0,0,0.1)
+  background:white;
+  margin:10px;
+  padding:12px;
+  border-radius:10px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.1);
 }
-.harga{color:#15803d;font-weight:bold}
+.harga{
+  color:#15803d;
+  font-weight:bold;
+}
 button{
- background:#15803d;
- color:white;
- border:none;
- padding:6px 12px;
- border-radius:6px;
- margin-top:8px;
+  background:#15803d;
+  color:white;
+  border:none;
+  padding:6px 12px;
+  border-radius:6px;
+  margin-top:8px;
 }
-.cartBar{
- position:fixed;
- bottom:0;
- width:100%;
- background:#15803d;
- color:white;
- text-align:center;
- padding:15px;
- font-weight:bold;
+.cartBtn{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  background:#15803d;
+  color:white;
+  text-align:center;
+  padding:15px;
+  font-weight:bold;
+  text-decoration:none;
+}
+.qtyBox{
+  margin-top:8px;
+}
+.qtyBox button{
+  padding:4px 10px;
 }
 </style>
 </head>
@@ -43,76 +65,111 @@ button{
 
 <div id="listProduk"></div>
 
-<div class="cartBar" onclick="window.location.href='cart.html'">
+<a href="cart.html" class="cartBtn">
 🛒 Lihat Keranjang
-</div>
+</a>
 
 <script>
 
 // ================= GOOGLE SHEET =================
-const sheetId="1iPbtRGldW5yz6tuUZ5oHzMGsnNb4cHyCbAEMkq51qK4";
-const sheetName="ZEVAN";
+const sheetId = "1iPbtRGldW5yz6tuUZ5oHzMGsnNb4cHyCbAEMkq51qK4";
+const sheetName = "ZEVAN"; // GANTI NANTI SESUAI SHEET LCD
 
-let semuaProduk=[];
-
-function rupiah(a){
-  return Math.round(a).toLocaleString("id-ID");
+function rupiah(angka){
+  return Math.round(angka).toLocaleString("id-ID");
 }
 
+let semuaProduk = [];
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+// ================= AMBIL DATA SHEET =================
 fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${sheetName}`)
-.then(res=>res.text())
-.then(data=>{
-  let json=JSON.parse(data.substring(47).slice(0,-2));
-  
-  semuaProduk=json.table.rows
-  .filter(r=>r.c && r.c[0])
-  .map(r=>({
-    kode:r.c[0]?.v || "",
-    nama:r.c[1]?.v || "",
-    kategori:r.c[2]?.v || "",
-    harga:Number(r.c[4]?.v || 0)
+.then(res => res.text())
+.then(data => {
+  let json = JSON.parse(data.substring(47).slice(0,-2));
+
+  semuaProduk = json.table.rows
+  .filter(r => r.c && r.c[0])
+  .map(r => ({
+    kode: r.c[0]?.v || "",
+    nama: r.c[1]?.v || "",
+    harga: Number(r.c[4]?.v || 0)
   }));
 
   renderProduk();
+})
+.catch(err => {
+  console.log("Gagal ambil sheet:", err);
 });
 
+// ================= RENDER PRODUK =================
 function renderProduk(){
-  let list=document.getElementById("listProduk");
-  list.innerHTML="";
+  let list = document.getElementById("listProduk");
+  list.innerHTML = "";
 
-  semuaProduk
-  .filter(p=>p.kategori==="LCD")
-  .forEach(p=>{
+  semuaProduk.forEach(p => {
 
-    list.innerHTML+=`
-      <div class="card">
-        <b>${p.nama}</b><br>
-        <span class="harga">Rp ${rupiah(p.harga)}</span><br><br>
-        <button onclick="tambahKeCart('${p.kode}','${p.nama}',${p.harga})">
-        + Tambah
-        </button>
-      </div>
+    let item = cart.find(c => c.kode === p.kode);
+    let qty = item ? item.qty : 0;
+
+    let div = document.createElement("div");
+    div.className = "card";
+
+    div.innerHTML = `
+      <b>${p.nama}</b><br>
+      ${p.kode}<br>
+      <span class="harga">Rp ${rupiah(p.harga)}</span>
     `;
+
+    if(qty === 0){
+      let btn = document.createElement("button");
+      btn.innerText = "+ Tambah";
+      btn.onclick = () => tambah(p);
+      div.appendChild(btn);
+    } else {
+      let box = document.createElement("div");
+      box.className = "qtyBox";
+      box.innerHTML = `
+        <button onclick="kurang('${p.kode}')">-</button>
+        <span style="margin:0 10px">${qty}</span>
+        <button onclick="tambahQty('${p.kode}')">+</button>
+      `;
+      div.appendChild(box);
+    }
+
+    list.appendChild(div);
   });
 }
 
 // ================= CART =================
-function tambahKeCart(kode,nama,harga){
-  let cart=JSON.parse(localStorage.getItem("cart"))||[];
+function tambah(p){
+  cart.push({...p, qty:1});
+  simpan();
+}
 
-  let existing=cart.find(p=>p.kode===kode);
+function tambahQty(kode){
+  let item = cart.find(p => p.kode === kode);
+  if(item) item.qty++;
+  simpan();
+}
 
-  if(existing){
-    existing.qty++;
-  }else{
-    cart.push({kode,nama,harga,qty:1});
+function kurang(kode){
+  let item = cart.find(p => p.kode === kode);
+  if(item){
+    item.qty--;
+    if(item.qty <= 0){
+      cart = cart.filter(p => p.kode !== kode);
+    }
   }
+  simpan();
+}
 
-  localStorage.setItem("cart",JSON.stringify(cart));
-
-  alert("Produk masuk keranjang");
+function simpan(){
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderProduk();
 }
 
 </script>
+
 </body>
 </html>
