@@ -2,14 +2,71 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Keranjang</title>
+<title>Keranjang Belanja</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-body{font-family:Arial;margin:0;background:#f2f2f2}
-header{background:#15803d;color:white;padding:15px;text-align:center}
-.card{background:white;margin:10px;padding:12px;border-radius:10px}
-button{background:#15803d;color:white;border:none;padding:10px;width:100%;margin-top:10px;border-radius:6px}
+body{font-family:Arial;margin:0;background:#f2f2f2;padding-bottom:100px}
+header{background:#15803d;color:white;padding:15px;text-align:center;font-size:20px}
+.card{
+ background:white;
+ margin:10px;
+ padding:12px;
+ border-radius:10px;
+ box-shadow:0 2px 6px rgba(0,0,0,0.1)
+}
+.harga{color:#15803d;font-weight:bold}
+.qtyBox{display:flex;align-items:center;gap:10px;margin-top:8px}
+.qtyBtn{
+ background:#15803d;
+ color:white;
+ border:none;
+ width:35px;
+ height:35px;
+ border-radius:6px;
+ font-size:18px;
+}
+.hapusBtn{
+ background:#dc2626;
+ color:white;
+ border:none;
+ padding:4px 8px;
+ border-radius:6px;
+ font-size:12px;
+}
+.totalBox{
+ background:white;
+ margin:10px;
+ padding:12px;
+ border-radius:10px;
+ font-weight:bold;
+}
+button.checkout{
+ background:#15803d;
+ color:white;
+ border:none;
+ padding:12px;
+ width:100%;
+ border-radius:8px;
+ font-size:16px;
+ margin-top:10px;
+}
+button.clear{
+ background:#9ca3af;
+ color:white;
+ border:none;
+ padding:10px;
+ width:100%;
+ border-radius:8px;
+ margin-top:10px;
+}
+input{
+ width:100%;
+ padding:10px;
+ margin-top:10px;
+ border-radius:8px;
+ border:1px solid #ccc;
+}
 </style>
 </head>
 
@@ -19,43 +76,105 @@ button{background:#15803d;color:white;border:none;padding:10px;width:100%;margin
 
 <div id="cartList"></div>
 
-<input type="text" id="wa" placeholder="Nomor WA">
+<div class="totalBox" id="totalBox"></div>
 
-<button onclick="checkout()">Checkout WhatsApp</button>
+<input type="text" id="wa" placeholder="Nomor WhatsApp">
+
+<button class="checkout" onclick="checkout()">Checkout WhatsApp</button>
+<button class="clear" onclick="kosongkan()">Kosongkan Keranjang</button>
 
 <script>
 
 function rupiah(a){ return Math.round(a).toLocaleString("id-ID"); }
 
-let cart=JSON.parse(localStorage.getItem("cart"))||[];
-let total=0;
-let html="";
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-cart.forEach(p=>{
- let sub=p.qty*p.harga;
- total+=sub;
+function renderCart(){
+ let list=document.getElementById("cartList");
+ let total=0;
+ list.innerHTML="";
 
- html+=`
- <div class="card">
-  <b>${p.nama}</b><br>
-  ${p.qty} x Rp ${rupiah(p.harga)}<br>
-  <b>Rp ${rupiah(sub)}</b>
- </div>
- `;
-});
+ if(cart.length===0){
+  list.innerHTML="<p style='margin:10px'>Keranjang kosong.</p>";
+  document.getElementById("totalBox").innerHTML="";
+  return;
+ }
 
-html+=`<div class="card"><b>Total: Rp ${rupiah(total)}</b></div>`;
-document.getElementById("cartList").innerHTML=html;
+ cart.forEach((p,index)=>{
+  let sub=p.qty*p.harga;
+  total+=sub;
 
-function checkout(){
- let wa=document.getElementById("wa").value;
- let pesan="Pesanan:\n";
-
- cart.forEach(p=>{
-  pesan+=p.nama+" x"+p.qty+"\n";
+  list.innerHTML+=`
+  <div class="card">
+    <b>${p.nama}</b><br>
+    <span class="harga">Rp ${rupiah(p.harga)}</span>
+    <div class="qtyBox">
+      <button class="qtyBtn" onclick="kurang(${index})">-</button>
+      <span>${p.qty}</span>
+      <button class="qtyBtn" onclick="tambah(${index})">+</button>
+      <button class="hapusBtn" onclick="hapus(${index})">Hapus</button>
+    </div>
+    <div><b>Subtotal: Rp ${rupiah(sub)}</b></div>
+  </div>
+  `;
  });
 
- pesan+="\nTotal: Rp "+rupiah(total);
+ document.getElementById("totalBox").innerHTML=
+ "Total Belanja: Rp "+rupiah(total);
+}
+
+function tambah(i){
+ cart[i].qty++;
+ simpan();
+}
+
+function kurang(i){
+ cart[i].qty--;
+ if(cart[i].qty<=0){
+   cart.splice(i,1);
+ }
+ simpan();
+}
+
+function hapus(i){
+ cart.splice(i,1);
+ simpan();
+}
+
+function kosongkan(){
+ if(confirm("Kosongkan semua keranjang?")){
+   cart=[];
+   simpan();
+ }
+}
+
+function simpan(){
+ localStorage.setItem("cart",JSON.stringify(cart));
+ renderCart();
+}
+
+function checkout(){
+ if(cart.length===0){
+  alert("Keranjang kosong");
+  return;
+ }
+
+ let wa=document.getElementById("wa").value.trim();
+ if(wa===""){
+  alert("Masukkan nomor WhatsApp");
+  return;
+ }
+
+ let total=0;
+ let pesan="🛒 PESANAN BARU\n\n";
+
+ cart.forEach(p=>{
+  let sub=p.qty*p.harga;
+  total+=sub;
+  pesan+=`${p.nama} x${p.qty} = Rp ${rupiah(sub)}\n`;
+ });
+
+ pesan+=`\nTotal: Rp ${rupiah(total)}`;
 
  window.open(
   "https://wa.me/62895707182299?text="+encodeURIComponent(pesan),
@@ -63,6 +182,9 @@ function checkout(){
  );
 }
 
+renderCart();
+
 </script>
+
 </body>
 </html>
