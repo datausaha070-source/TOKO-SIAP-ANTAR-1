@@ -102,25 +102,64 @@ function kosongkan(){ localStorage.removeItem("cart"); location.reload(); }
 function simpan(){ localStorage.setItem("cart",JSON.stringify(cart)); renderCart(); }
 
 // ================= MAP =================
-var map = L.map('map').setView([tokoLat,tokoLng],15);
 
-L.tileLayer(
- 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+const tokoLat = -6.883831;
+const tokoLng = 108.302788;
+
+let markerUser = null;
+let namaDesa = "-";
+let namaKecamatan = "-";
+
+var map = L.map('map').setView([tokoLat, tokoLng], 15);
+
+// 🗺️ NORMAL (dengan nama kota)
+var normalLayer = L.tileLayer(
+ 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+ {maxZoom:19}
 ).addTo(map);
 
-L.marker([tokoLat,tokoLng])
-.addTo(map)
-.bindPopup("Lokasi Toko")
-.openPopup();
+// 🛰️ SATELIT
+var satelliteLayer = L.tileLayer(
+ 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+ {maxZoom:19}
+);
 
-map.on('click',function(e){
-  setLokasi(e.latlng.lat,e.latlng.lng);
+// 🏷️ LABEL NAMA KOTA
+var labelLayer = L.tileLayer(
+ 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+ {maxZoom:19, opacity:0.4}
+);
+
+// 🛰️ SATELIT + NAMA
+var satelliteWithLabel = L.layerGroup([satelliteLayer, labelLayer]);
+
+// 🎛️ CONTROL PILIHAN PETA
+L.control.layers({
+ "🗺️ Peta Normal": normalLayer,
+ "🛰️ Satelit": satelliteLayer,
+ "🛰️ Satelit + Nama": satelliteWithLabel
+}).addTo(map);
+
+// 📍 Marker toko
+L.marker([tokoLat, tokoLng])
+ .addTo(map)
+ .bindPopup("Lokasi Toko")
+ .openPopup();
+
+// Klik map
+map.on('click', function(e){
+ setLokasi(e.latlng.lat, e.latlng.lng);
 });
 
+// Tombol gunakan lokasi
 function gunakanLokasi(){
  navigator.geolocation.getCurrentPosition(
-  pos => setLokasi(pos.coords.latitude,pos.coords.longitude),
-  err => alert("Gagal ambil lokasi: "+err.message),
+  function(pos){
+   setLokasi(pos.coords.latitude, pos.coords.longitude);
+  },
+  function(err){
+   alert("Gagal ambil lokasi: " + err.message);
+  },
   {enableHighAccuracy:true}
  );
 }
