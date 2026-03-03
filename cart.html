@@ -102,9 +102,23 @@ function hapus(i){ cart.splice(i,1); simpan(); }
 function kosongkan(){ localStorage.removeItem("cart"); location.reload(); }
 function simpan(){ localStorage.setItem("cart",JSON.stringify(cart)); renderCart(); }
 function lanjutBayar(){
+
+  if(!tujuanLat){
+    alert("Pilih lokasi dulu");
+    return;
+  }
+
+  // Simpan data lokasi
+  localStorage.setItem("checkoutData", JSON.stringify({
+    lat: tujuanLat,
+    lng: tujuanLng,
+    desa: namaDesa,
+    kecamatan: namaKecamatan,
+    ongkir: ongkir
+  }));
+
   window.location.href = "bayar.html";
 }
-
 // ================= MAP =================
 var map = L.map('map').setView([tokoLat,tokoLng],15);
 
