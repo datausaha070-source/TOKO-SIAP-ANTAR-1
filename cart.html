@@ -186,8 +186,13 @@ function checkout(){
   if(cart.length===0){ alert("Keranjang kosong"); return; }
   if(!tujuanLat){ alert("Pilih lokasi dulu"); return; }
 
-  let total=0;
-  cart.forEach(p=> total += p.harga*p.qty);
+  let total = 0;
+  let totalItem = 0;
+
+  cart.forEach(p=>{
+    total += p.harga*p.qty;
+    totalItem += p.qty;
+  });
 
   if(minimalBelanja>0 && total<minimalBelanja){
     alert("Minimal belanja Rp "+rupiah(minimalBelanja));
@@ -197,12 +202,39 @@ function checkout(){
   let noWa=document.getElementById("waPembeli").value.trim();
   if(!noWa){ alert("Isi nomor WA dulu"); return; }
 
+  // ================= AUTO DATA ORDER =================
+  let now = new Date();
+
+  let yy = String(now.getFullYear()).slice(2);
+  let mm = String(now.getMonth()+1).padStart(2,'0');
+  let dd = String(now.getDate()).padStart(2,'0');
+
+  let hh = String(now.getHours()).padStart(2,'0');
+  let mi = String(now.getMinutes()).padStart(2,'0');
+  let ss = String(now.getSeconds()).padStart(2,'0');
+
+  let nomorHarian = yy+mm+dd+"-"+hh+mi;
+  let orderId = Date.now();
+
+  let tanggal = now.toLocaleDateString("id-ID");
+  let jam = hh+"."+mi+"."+ss;
+
+  // ================= DETAIL PRODUK =================
   let detail="";
   cart.forEach(p=>{
-    detail+=p.nama+" x"+p.qty+" = Rp "+rupiah(p.harga*p.qty)+"\n";
+    detail +=
+    "• "+p.nama+"\n"+
+    "  Qty: "+p.qty+"\n"+
+    "  Harga: Rp"+rupiah(p.harga*p.qty)+"\n\n";
   });
 
   let totalBayar=total+ongkir;
+
+  let linkMaps =
+  "https://www.google.com/maps/search/?api=1&query="
+  + tujuanLat + "," + tujuanLng;
+
+  // ================= PESAN WA =================
   let pesan =
 "━━━━━━━━━━━━━━━━━━━━\n"+
 "🏪 TOKO SIAP ANTAR\n"+
@@ -228,15 +260,15 @@ detail+
 
 "Total Item   : "+totalItem+" pcs\n"+
 "Total Barang : Rp"+rupiah(total)+"\n"+
-"Ongkir       : Rp"+rupiah(ongkirFix)+"\n"+
+"Ongkir       : Rp"+rupiah(ongkir)+"\n"+
 "────────────────────\n"+
 "TOTAL BAYAR  : Rp"+rupiah(totalBayar)+"\n\n"+
 
 "━━━━━━━━━━━━━━━━━━━━\n"+
 "📍 LOKASI PENGIRIMAN\n"+
 "━━━━━━━━━━━━━━━━━━━━\n"+
-"Desa       : "+(window.namaDesa || "-")+"\n"+
-"Kecamatan  : "+(window.namaKecamatan || "-")+"\n"+
+"Desa       : "+namaDesa+"\n"+
+"Kecamatan  : "+namaKecamatan+"\n"+
 linkMaps+"\n\n"+
 
 "━━━━━━━━━━━━━━━━━━━━\n"+
@@ -251,10 +283,11 @@ linkMaps+"\n\n"+
 "⚠️ Mohon cek kembali pesanan Anda.\n"+
 "Setelah transfer kirim bukti pembayaran ke admin.\n"+
 "━━━━━━━━━━━━━━━━━━━━";
- window.open(
-   "https://wa.me/62895707182299?text="+encodeURIComponent(pesan),
-   "_blank"
- );
+
+  window.open(
+    "https://wa.me/62895707182299?text="+encodeURIComponent(pesan),
+    "_blank"
+  );
 }
 renderCart();
 </script>
