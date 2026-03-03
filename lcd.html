@@ -38,6 +38,13 @@ button{
   padding:6px 12px;
   border-radius:6px;
   margin-top:8px;
+  cursor:pointer;
+}
+.qtyBox{
+  margin-top:8px;
+}
+.qtyBox button{
+  padding:4px 10px;
 }
 .cartBtn{
   position:fixed;
@@ -50,11 +57,12 @@ button{
   font-weight:bold;
   text-decoration:none;
 }
-.qtyBox{
-  margin-top:8px;
-}
-.qtyBox button{
-  padding:4px 10px;
+input{
+  width:95%;
+  margin:10px;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #ccc;
 }
 </style>
 </head>
@@ -62,20 +70,18 @@ button{
 <body>
 
 <header>📱 Produk LCD</header>
-<input type="text" id="searchInput" placeholder="🔍 Cari produk..." onkeyup="renderProduk()" 
-style="width:95%;margin:10px;padding:10px;border-radius:8px;border:1px solid #ccc;">
+
+<input type="text" id="searchInput" placeholder="🔍 Cari produk..." onkeyup="renderProduk()">
 
 <div id="listProduk"></div>
 
-<a href="cart.html" class="cartBtn">
-🛒 Lihat Keranjang
-</a>
+<a href="cart.html" class="cartBtn">🛒 Lihat Keranjang</a>
 
 <script>
 
 // ================= GOOGLE SHEET =================
 const sheetId = "1iPbtRGldW5yz6tuUZ5oHzMGsnNb4cHyCbAEMkq51qK4";
-const sheetName = "ZEVAN"; // GANTI NANTI SESUAI SHEET LCD
+const sheetName = "ZEVAN";
 
 function rupiah(angka){
   return Math.round(angka).toLocaleString("id-ID");
@@ -84,7 +90,7 @@ function rupiah(angka){
 let semuaProduk = [];
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// ================= AMBIL DATA SHEET =================
+// ================= AMBIL DATA =================
 fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${sheetName}`)
 .then(res => res.text())
 .then(data => {
@@ -100,57 +106,74 @@ fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${sheetNa
 
   renderProduk();
 })
-.catch(err => {
-  console.log("Gagal ambil sheet:", err);
-});
+.catch(err => console.log("Gagal ambil sheet:", err));
+
 
 // ================= RENDER PRODUK =================
 function renderProduk(){
 
- let keyword = document.getElementById("searchInput").value.toLowerCase();
- let list = document.getElementById("listProduk");
- list.innerHTML = "";
+  let list = document.getElementById("listProduk");
+  let keyword = document.getElementById("searchInput").value.toLowerCase();
 
- semuaProduk
- .filter(p =>
-   p.nama.toLowerCase().includes(keyword) ||
-   p.kode.toLowerCase().includes(keyword)
- )
- .forEach(p=>{
+  list.innerHTML = "";
 
-   let itemCart = cart.find(c=>c.kode===p.kode);
-   let qty = itemCart ? itemCart.qty : 0;
+  semuaProduk
+  .filter(p =>
+    p.nama.toLowerCase().includes(keyword) ||
+    p.kode.toLowerCase().includes(keyword)
+  )
+  .forEach(p => {
 
-   let div=document.createElement("div");
-   div.className="card";
+    let item = cart.find(c => c.kode === p.kode);
+    let qty = item ? item.qty : 0;
 
-   div.innerHTML = `
-     <b>${p.nama}</b><br>
-     ${p.kode}<br>
-     <span class="harga">Rp ${rupiah(p.harga)}</span>
-   `;
+    let div = document.createElement("div");
+    div.className = "card";
 
-   if(qty===0){
-     let btn=document.createElement("button");
-     btn.innerText="+ Tambah";
-     btn.onclick=()=>tambahProduk(p);
-     div.appendChild(btn);
-   }else{
-     div.innerHTML += `
-       <br>
-       <button onclick="kurang('${p.kode}')">-</button>
-       ${qty}
-       <button onclick="tambah('${p.kode}')">+</button>
-     `;
-   }
+    div.innerHTML =
+      "<b>"+p.nama+"</b><br>" +
+      p.kode + "<br>" +
+      "<span class='harga'>Rp "+rupiah(p.harga)+"</span>";
 
-   list.appendChild(div);
- });
+    if(qty === 0){
 
+      let btn = document.createElement("button");
+      btn.innerText = "+ Tambah";
+      btn.onclick = function(){
+        tambahProduk(p);
+      };
+      div.appendChild(document.createElement("br"));
+      div.appendChild(btn);
+
+    } else {
+
+      let box = document.createElement("div");
+      box.className = "qtyBox";
+      box.innerHTML =
+        "<button onclick=\"kurang('"+p.kode+"')\">-</button> " +
+        qty +
+        " <button onclick=\"tambahQty('"+p.kode+"')\">+</button>";
+
+      div.appendChild(box);
+    }
+
+    list.appendChild(div);
+
+  });
 }
-// ================= CART =================
-function tambah(p){
-  cart.push({...p, qty:1});
+
+
+// ================= CART SYSTEM =================
+function tambahProduk(p){
+
+  let item = cart.find(x => x.kode === p.kode);
+
+  if(item){
+    item.qty++;
+  } else {
+    cart.push({...p, qty:1});
+  }
+
   simpan();
 }
 
