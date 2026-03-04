@@ -6,341 +6,239 @@
 <title>A YUDI THEA | Servis Handphone</title>
 
 <style>
-.btn-modern {
-  display: inline-block;
-  padding: 14px 22px;
-  border-radius: 40px;
-  font-weight: 600;
-  font-size: 15px;
-  text-decoration: none;
-  color: #fff;
-  transition: all 0.2s ease;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
-  position: relative;
-  overflow: hidden;
-}
 
-/* Hijau */
-.btn-green {
-  background: linear-gradient(145deg, #16a34a, #15803d);
-}
-
-/* Orange */
-.btn-orange {
-  background: linear-gradient(145deg, #f59e0b, #ea580c);
-}
-
-/* Hover effect */
-.btn-modern:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-}
-
-/* Saat ditekan */
-.btn-modern:active {
-  transform: scale(0.96);
-  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-}
-
-/* Efek kilau */
-.btn-modern::after {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -100%;
-  width: 60%;
-  height: 200%;
-  background: rgba(255,255,255,0.2);
-  transform: rotate(25deg);
-  transition: 0.6s;
-}
-
-.btn-modern:hover::after {
-  left: 120%;
-}
 /* ===== RESET ===== */
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family: 'Segoe UI', sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
 }
 
 body{
-    background:#f4f6f9;
-    color:#333;
+background:#f4f6f9;
+color:#333;
 }
 
-/* ===== COLOR SYSTEM ===== */
+/* ===== COLOR ===== */
 :root{
-    --primary:#1faa59;       /* hijau logo */
-    --primary-dark:#178a47;
-    --accent:#ff9800;        /* orange logo */
-    --accent-dark:#e68900;
-    --dark:#1e1e1e;
-    --light:#ffffff;
+--primary:#1faa59;
+--primary-dark:#178a47;
+--accent:#ff9800;
+--accent-dark:#e68900;
 }
 
-/* ===== HEADER ===== */
+/* HEADER */
 .header{
-    background:#ffffff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    height:420px;
-    position:relative;
+background:white;
+display:flex;
+align-items:center;
+justify-content:center;
+height:420px;
+position:relative;
 }
 
 .header img{
-    width:90%;
-    max-width:480px;
-    height:auto;
-    transition:0.4s ease;
-}
-
-.header img:hover{
-    transform:scale(1.05);
+width:90%;
+max-width:480px;
 }
 
 .header::after{
-    content:"";
-    position:absolute;
-    bottom:0;
-    left:0;
-    width:100%;
-    height:4px;
-    background:linear-gradient(90deg,var(--primary),var(--accent));
+content:"";
+position:absolute;
+bottom:0;
+left:0;
+width:100%;
+height:4px;
+background:linear-gradient(90deg,var(--primary),var(--accent));
 }
 
-/* ===== HERO SECTION ===== */
+/* HERO */
 .hero{
-    padding:40px 20px;
-    text-align:center;
-    background:#ffffff;
+padding:40px 20px;
+text-align:center;
+background:white;
 }
 
 .hero h2{
-    color:var(--primary);
-    font-size:26px;
-    margin-bottom:10px;
+color:var(--primary);
+margin-bottom:10px;
 }
 
 .hero p{
-    color:#666;
-    margin-bottom:25px;
+color:#666;
+margin-bottom:20px;
 }
 
-/* ===== PROMO BAR ===== */
-.promo{
-    background:linear-gradient(90deg,var(--primary),var(--primary-dark));
-    color:white;
-    padding:14px;
-    border-radius:12px;
-    margin:15px auto;
-    max-width:600px;
-    font-weight:500;
-    box-shadow:0 8px 20px rgba(0,0,0,0.1);
+/* BUTTON */
+.btn-modern{
+display:inline-block;
+padding:14px 22px;
+border-radius:40px;
+color:white;
+text-decoration:none;
+font-weight:600;
+box-shadow:0 6px 15px rgba(0,0,0,0.25);
+}
+.btn-cart{
+margin-top:auto;
+width:100%;
+border:none;
+background:#1faa59;
+color:white;
+padding:8px;
+border-radius:6px;
+}
+.btn-green{
+background:linear-gradient(145deg,#16a34a,#15803d);
 }
 
-/* ===== MAIN BUTTON ===== */
-.btn{
-    display:inline-block;
-    padding:14px 28px;
-    background:linear-gradient(90deg,var(--accent),var(--accent-dark));
-    color:white;
-    text-decoration:none;
-    border-radius:50px;
-    font-weight:600;
-    margin:15px 0;
-    box-shadow:0 8px 25px rgba(0,0,0,0.15);
-    transition:0.3s;
+.btn-orange{
+background:linear-gradient(145deg,#f59e0b,#ea580c);
 }
 
-.btn:hover{
-    transform:translateY(-3px);
-    box-shadow:0 12px 30px rgba(0,0,0,0.2);
-}
-
-/* ===== MENU BUTTONS ===== */
+/* MENU */
 .menu-pro{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:12px;
-    margin-top:25px;
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:12px;
+margin-top:25px;
 }
 
 .menu-pro a{
-    padding:14px 22px;
-    background:linear-gradient(145deg,#16a34a,#15803d);
-    color:white;
-    border-radius:40px;
-    text-decoration:none;
-    font-size:15px;
-    font-weight:600;
-    box-shadow:0 6px 15px rgba(0,0,0,0.15);
-    transition:0.3s;
+padding:12px 20px;
+background:linear-gradient(145deg,#16a34a,#15803d);
+color:white;
+border-radius:40px;
+text-decoration:none;
 }
 
-.menu-pro a:hover{
-    transform:translateY(-3px);
-    background:linear-gradient(145deg,#f59e0b,#ea580c);
-}
-/* ===== CARD SECTION ===== */
-.card{
-    background:white;
-    padding:25px;
-    margin:30px auto;
-    border-radius:18px;
-    max-width:900px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.08);
+/* PRODUK */
+.produk-container{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+padding:15px;
+max-width:900px;
+margin:auto;
 }
 
-.card h3{
-    text-align:center;
-    margin-bottom:20px;
-    color:var(--dark);
+.produk-card{
+background:white;
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 6px 18px rgba(0,0,0,0.12);
+display:flex;
+flex-direction:column;
+height:100%;
 }
 
-.card ul{
-    list-style:none;
-    line-height:2;
+.produk-img{
+width:100%;
+height:150px;
+object-fit:cover;
 }
 
-/* ===== MAP ===== */
-.map-section{
-    margin:40px auto;
-    max-width:1000px;
-    padding:0 20px;
+.produk-info{
+padding:10px;
+display:flex;
+flex-direction:column;
+flex:1;
 }
 
-.map-container{
-    border-radius:18px;
-    overflow:hidden;
-    box-shadow:0 10px 30px rgba(0,0,0,0.1);
+.produk-nama{
+font-size:14px;
+font-weight:600;
 }
 
-.map-btn{
-    display:inline-block;
-    margin-top:15px;
-    padding:12px 25px;
-    background:var(--primary);
-    color:white;
-    border-radius:30px;
-    text-decoration:none;
-    transition:0.3s;
+.produk-harga{
+color:#ff6a00;
+font-weight:bold;
+margin:6px 0;
 }
 
-.map-btn:hover{
-    background:var(--primary-dark);
+.btn-cart{
+width:100%;
+border:none;
+background:#1faa59;
+color:white;
+padding:8px;
+border-radius:6px;
 }
 
-/* ===== FOOTER ===== */
-footer{
-    background:var(--dark);
-    color:white;
-    text-align:center;
-    padding:25px;
-    margin-top:50px;
-    font-size:14px;
-}
-
-/* ===== RESPONSIVE ===== */
-@media(max-width:768px){
-    .header{
-        height:320px;
-    }
-
-    .header img{
-        max-width:320px;
-    }
-
-    .hero h2{
-        font-size:20px;
-    }
+/* CART FLOAT */
 #cartFloat{
- position:fixed;
- bottom:25px;
- right:20px;
- background:linear-gradient(145deg,#16a34a,#15803d);
- color:white;
- padding:12px 18px;
- border-radius:50px;
- font-weight:600;
- box-shadow:0 8px 20px rgba(0,0,0,0.25);
- cursor:pointer;
- z-index:9999;
- display:flex;
- align-items:center;
- gap:8px;
+position:fixed;
+bottom:25px;
+right:20px;
+background:linear-gradient(145deg,#16a34a,#15803d);
+color:white;
+padding:12px 18px;
+border-radius:50px;
+font-weight:600;
+box-shadow:0 8px 20px rgba(0,0,0,0.25);
+cursor:pointer;
+z-index:9999;
 }
 
 #cartCount{
- background:#ff9800;
- padding:3px 8px;
- border-radius:50px;
- font-size:12px;
+background:#ff9800;
+padding:3px 8px;
+border-radius:50px;
+font-size:12px;
 }
-}
+
 </style>
 </head>
+
+<body>
+
+<!-- FLOAT CART -->
 <div id="cartFloat" onclick="window.location.href='cart.html'">
 🛒 <span id="cartCount">0</span>
 </div>
-<script>
-function updateCartCount(){
- let cart = JSON.parse(localStorage.getItem("cart")) || [];
- let totalItem = 0;
-
- cart.forEach(p=>{
-  totalItem += p.qty;
- });
-
- document.getElementById("cartCount").innerText = totalItem;
-}
-
-updateCartCount();
-</script>
-<body>
 
 <!-- HEADER -->
 <div class="header">
-  <!-- Nanti ganti logo.jpg -->
- <img src="logo2.png" class="logo" alt="Toko Siap Antar">
+<img src="logo2.png" alt="Toko Siap Antar">
 </div>
 
 <!-- HERO -->
 <div class="hero">
-  <h2>🔧 Spesialis LCD, Baterai & IC Handphone</h2>
-  <p>Ready Stock • Harga Grosir • Bergaransi</p>
+<h2>🔧 Spesialis LCD, Baterai & IC Handphone</h2>
+<p>Ready Stock • Harga Grosir • Bergaransi</p>
 
- <a href="#" class="btn-modern btn-green">
+<a href="#" class="btn-modern btn-green">
 🚚 Estimasi pengiriman 2 / 3 hari →
 </a>
- <a href="siapantar.html" class="btn-modern btn-orange">
+
+<a href="siapantar.html" class="btn-modern btn-orange">
 📦 Minimal 20pcs setiap pengambilan →
 </a>
+
 </div>
- <div class="menu-pro">
-  <a href="lcd.html?kategori=LCD">📱 LCD</a>
-  <a href="dataproduck.html?kategori=BATERAI">🔋 Baterai</a>
-  <a href="kategori.html?kategori=IC">🧩 IC</a>
-  <a href="kategori.html?kategori=SPEAKER">🔊 Speaker</a>
-  <a href="cart.html">🛒 Keranjang</a>
+
+<!-- MENU -->
+<div class="menu-pro">
+<a href="lcd.html?kategori=LCD">📱 LCD</a>
+<a href="kategori.html?kategori=BATERAI">🔋 Baterai</a>
+<a href="kategori.html?kategori=IC">🧩 IC</a>
+<a href="kategori.html?kategori=SPEAKER">🔊 Speaker</a>
+<a href="cart.html">🛒 Keranjang</a>
 </div>
-  
-<div class="section">
-  <div class="card">
-   
-</div>
+
+<!-- PRODUK -->
+<div id="produkList" class="produk-container"></div>
+
 <!-- FOOTER -->
-<div class="footer" style="text-align:center">
+<div style="text-align:center;margin-top:30px">
 
 📍 Lokasi Toko Kami<br><br>
 
 <a href="https://www.google.com/maps?q=-6.883831,108.302788"
 target="_blank"
-class="btn">
+class="btn-modern btn-orange">
 Buka di Google Maps
 </a>
 
@@ -349,3 +247,156 @@ Buka di Google Maps
 WA: 082319264646
 
 </div>
+
+<!-- SCRIPT CART -->
+<script>
+function updateCartCount(){
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let total=0;
+
+cart.forEach(p=>{
+total+=p.qty;
+});
+
+document.getElementById("cartCount").innerText=total;
+}
+
+updateCartCount();
+
+function tambahKeranjang(nama,harga,foto){
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+let index = cart.findIndex(p => p.nama === nama);
+
+if(index >= 0){
+
+cart[index].qty += 1;
+
+}else{
+
+cart.push({
+nama:nama,
+harga:Number(harga),
+foto:foto,
+qty:1
+});
+
+}
+
+localStorage.setItem("cart", JSON.stringify(cart));
+
+updateCartCount();
+
+alert("Produk masuk keranjang");
+
+}
+
+function updateCartCount(){
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let total=0;
+
+cart.forEach(p=>{
+total+=p.qty;
+});
+
+document.getElementById("cartCount").innerText=total;
+}
+
+updateCartCount();
+function convertDrive(link){
+
+if(!link) return "";
+
+let id = "";
+
+if(link.includes("id=")){
+id = link.split("id=")[1];
+}
+
+if(link.includes("/d/")){
+id = link.split("/d/")[1].split("/")[0];
+}
+
+return "https://drive.google.com/uc?export=view&id="+id;
+
+}
+</script>
+
+<!-- SCRIPT PRODUK GOOGLE SHEET -->
+<script>
+
+const sheetURL =
+"https://docs.google.com/spreadsheets/d/19AfachAS9ZyNuut61RB1wqyI_AI6BsmNT1SIWhmSIn8/gviz/tq?sheet=MEMBER";
+
+fetch(sheetURL)
+.then(res => res.text())
+.then(data => {
+
+const json = JSON.parse(data.substring(47).slice(0,-2));
+
+let rows = json.table.rows;
+
+let html = "";
+
+rows.forEach(r=>{
+
+let nama = r.c[1]?.v;
+let harga = r.c[7]?.v;
+let foto = convertDrive(r.c[9]?.v);
+if(!nama) return;
+
+html += `
+<div class="produk-card">
+
+<div class="produk-img"
+style="
+height:120px;
+display:flex;
+align-items:center;
+justify-content:center;
+background:linear-gradient(135deg,#16a34a,#f97316);
+">
+
+<a href="${foto}" target="_blank"
+style="
+text-decoration:none;
+color:white;
+font-weight:bold;
+font-size:18px;
+background:rgba(0,0,0,0.2);
+padding:10px 16px;
+border-radius:8px;
+">
+📷 Lihat Foto
+</a>
+
+</div>
+
+<div class="produk-info">
+
+<div class="produk-nama">${nama}</div>
+
+<div class="produk-harga">
+Rp ${Number(harga).toLocaleString()}
+</div>
+
+<button class="btn-cart"
+onclick="tambahKeranjang('${nama}','${harga}','${foto}')">
++ Keranjang
+</button>
+
+</div>
+</div>
+`;
+
+});
+
+document.getElementById("produkList").innerHTML = html;
+
+});
+
+</script>
+
+</body>
+</html>
