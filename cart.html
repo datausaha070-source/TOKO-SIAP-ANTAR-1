@@ -116,14 +116,14 @@ function simpan(){ localStorage.setItem("cart",JSON.stringify(cart)); renderCart
 function lanjutBayar(){
 
   if(!tujuanLat){
-    alert("Pilih lokasi dulu");
+    popup("Pilih lokasi pengiriman dulu");
     return;
   }
 
   let noWa = document.getElementById("waPembeli").value.trim();
 
   if(!noWa){
-    alert("Isi nomor WA dulu");
+    popup("Isi nomor WhatsApp dulu");
     return;
   }
 
@@ -133,7 +133,7 @@ function lanjutBayar(){
     desa: namaDesa,
     kecamatan: namaKecamatan,
     ongkir: ongkir,
-    noWa: noWa   // ⬅ TAMBAHKAN INI
+    noWa: noWa
   }));
 
   window.location.href = "bayar.html";
