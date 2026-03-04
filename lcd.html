@@ -81,7 +81,7 @@ input{
 
 // ================= GOOGLE SHEET =================
 const sheetId = "1iPbtRGldW5yz6tuUZ5oHzMGsnNb4cHyCbAEMkq51qK4";
-const sheetName = "ZEVAN";
+const sheetName = "Stock Konter";
 
 function rupiah(angka){
   return Math.round(angka).toLocaleString("id-ID");
@@ -99,9 +99,9 @@ fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${sheetNa
   semuaProduk = json.table.rows
   .filter(r => r.c && r.c[0])
   .map(r => ({
-    kode: r.c[0]?.v || "",
+    kode: r.c[7]?.v || "",
     nama: r.c[1]?.v || "",
-    harga: Number(r.c[4]?.v || 0)
+    harga: Number(r.c[3]?.v || 0)
   }));
 
   renderProduk();
