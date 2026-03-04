@@ -294,8 +294,15 @@ if(!nama) return;
 html += `
 <div class="produk-card">
 
-<img src="${foto}" class="produk-img">
+<div class="produk-img"
+style="display:flex;align-items:center;justify-content:center;height:150px;background:#eee">
 
+<a href="${foto}" target="_blank"
+style="text-decoration:none;color:#1faa59;font-weight:bold">
+📷 Lihat Foto
+</a>
+
+</div>
 <div class="produk-info">
 
 <div class="produk-nama">${nama}</div>
