@@ -101,7 +101,7 @@ fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${sheetNa
   .map(r => ({
     kode: r.c[7]?.v || "",
     nama: r.c[1]?.v || "",
-    harga: Number(r.c[3]?.v || 0)
+    harga: Number(r.c[4]?.v || 0)
   }));
 
   renderProduk();
