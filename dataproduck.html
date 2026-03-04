@@ -251,23 +251,25 @@ updateCartCount();
 <script>
 
 const sheetURL =
-"https://docs.google.com/spreadsheets/d/19AfachAS9ZyNuut61RB1wqyI_AI6BsmNT1SIWhmSIn8/gviz/tq?tqx=out:csv&sheet=MEMBER";
+"https://docs.google.com/spreadsheets/d/19AfachAS9ZyNuut61RB1wqyI_AI6BsmNT1SIWhmSIn8/gviz/tq?sheet=MEMBER";
 
 fetch(sheetURL)
 .then(res => res.text())
 .then(data => {
 
-let rows = data.split("\n").slice(1);
+const json = JSON.parse(
+data.substring(47).slice(0,-2)
+);
+
+let rows = json.table.rows;
 
 let html = "";
 
-rows.forEach(row => {
+rows.forEach(r=>{
 
-let col = row.split(",");
-
-let nama = col[1];     // Produk
-let harga = col[7];    // Harga_fix
-let foto = col[9];     // Foto_fix
+let nama = r.c[1]?.v;
+let harga = r.c[7]?.v;
+let foto = r.c[9]?.v;
 
 if(!nama) return;
 
