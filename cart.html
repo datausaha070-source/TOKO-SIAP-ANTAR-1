@@ -250,8 +250,8 @@ function hitungOngkir(){
 // ================= CHECKOUT =================
 function checkout(){
 
-  if(cart.length===0){ alert("Keranjang kosong"); return; }
-  if(!tujuanLat){ alert("Pilih lokasi dulu"); return; }
+  if(cart.length===0){ alert("TOKO SIAP ANTAR\n\nKeranjang kosong"); return; }
+  if(!tujuanLat){ alert("TOKO SIAP ANTAR\n\nPilih lokasi pengiriman dulu"); return; }
 
   let total = 0;
   let totalItem = 0;
@@ -262,11 +262,11 @@ function checkout(){
   });
 
   if(minimalBelanja>0 && total<minimalBelanja){
-    alert("Minimal belanja Rp "+rupiah(minimalBelanja));
+    alert("TOKO SIAP ANTAR\n\nMinimal belanja Rp "+rupiah(minimalBelanja));
     return;
   }
 
-  let noWa=document.getElementById("waPembeli").value.trim();
+  let noWa = document.getElementById("waPembeli").value.trim();
   if(!noWa){ 
 alert("TOKO SIAP ANTAR\n\nIsi nomor WhatsApp dulu"); 
 return; 
