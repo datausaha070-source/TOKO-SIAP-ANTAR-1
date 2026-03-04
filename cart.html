@@ -96,7 +96,7 @@ function renderCart(){
   });
 
   let totalBayar = total + ongkir;
-
+kontrolCheckout(total);
   list.innerHTML += `
   <div class="card">
     <b>Total Barang : Rp ${rupiah(total)}</b><br>
