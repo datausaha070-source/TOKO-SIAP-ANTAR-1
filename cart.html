@@ -37,7 +37,7 @@ input{width:95%;margin:10px;padding:10px;border-radius:8px;border:1px solid #ccc
 
 <input type="tel" id="waPembeli" placeholder="Nomor WhatsApp Aktif">
 
-<div class="checkout" onclick="lanjutBayar()">Checkout</div>
+<div class="checkout" id="btnCheckout" onclick="lanjutBayar()">Checkout</div>
 <div class="clearBtn" onclick="kosongkan()">Kosongkan Keranjang</div>
 
 <script>
@@ -60,7 +60,19 @@ let markerUser = null;
 function rupiah(a){
   return Math.round(a).toLocaleString("id-ID");
 }
+function kontrolCheckout(total){
 
+let tombol = document.getElementById("btnCheckout");
+
+if(minimalBelanja > 0 && total < minimalBelanja){
+    tombol.style.background = "#9ca3af";
+    tombol.style.pointerEvents = "none";
+}else{
+    tombol.style.background = "#15803d";
+    tombol.style.pointerEvents = "auto";
+}
+
+}
 // ================= RENDER CART =================
 function renderCart(){
   let list = document.getElementById("cartList");
