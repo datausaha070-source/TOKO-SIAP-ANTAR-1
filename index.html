@@ -457,5 +457,43 @@ document.getElementById("searchInput").addEventListener("keyup", function() {
   });
 });
 </script>
+  <script>
+function tutupPromo(){
+document.getElementById("promoPopup").style.display="none";
+}
+</script>
+
+<!-- POPUP PROMOSI TOKO SIAP ANTAR -->
+
+<div id="promoPopup">
+
+<div class="promo-box">
+
+<img src="logo.png" class="logo">
+
+<h2>Belanja Sparepart HP Lebih Mudah!</h2>
+
+<p class="promo-text">
+🔥 Ready Stock LCD, Battery & Sparepart HP<br>
+💰 Harga Grosir & Bergaransi<br>
+⚡ Pengiriman Super Cepat Estimasi 1 Jam<br>
+📍 Area Kabupaten Majalengka
+</p>
+
+<div class="promo-highlight">
+🚀 Pesan Sekarang – Kami Siap Antar ke Lokasi Anda!
+</div>
+
+<button onclick="tutupPromo()" class="btn-belanja">
+Mulai Belanja
+</button>
+
+<button onclick="tutupPromo()" class="btn-close">
+Tutup
+</button>
+
+</div>
+
+</div>
 </body>
 </html>
