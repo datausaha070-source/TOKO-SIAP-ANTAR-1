@@ -99,7 +99,7 @@ text-decoration:none;
 
 <body>
 
-<header>Produck Battery</header>
+<header>Tools & Saprepart</header>
 
 <div class="searchBox">
 <input type="text" id="search" placeholder="🔍 Cari produk...">
@@ -123,7 +123,7 @@ return Math.round(x).toLocaleString("id-ID");
 
 // ================= LOAD SHEET =================
 
-loadSheet("BATRE","BATRE");
+loadSheet("SPAREPART","SPAREPART");
 
 
 function loadSheet(sheetName,kategori){
@@ -168,7 +168,7 @@ let keyword=document.getElementById("search").value.toLowerCase();
 
 list.innerHTML="";
 
-["LCD","BATRE"].forEach(kat=>{
+["LCD","SPAREPART"].forEach(kat=>{
 
 let produkKategori=semuaProduk.filter(p=>
 p.kategori===kat &&
