@@ -171,13 +171,7 @@ Buat Pesanan
 </button>
 
 </div>
-if(trx < 10){
-popupCOD(
-"COD belum tersedia.<br><br>"+
-"Belanja "+(10-trx)+" kali lagi untuk membuka COD"
-);
-return;
-}
+
 <script>
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -451,6 +445,13 @@ no = "62" + no;
 
 return no;
 
+}
+if(trx < 10){
+popupCOD(
+"COD belum tersedia.<br><br>"+
+"Belanja "+(10-trx)+" kali lagi untuk membuka COD"
+);
+return;
 }
 
 </script>
