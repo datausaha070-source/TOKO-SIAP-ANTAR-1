@@ -323,7 +323,49 @@ setLokasi(e.latlng.lat,e.latlng.lng);
 
 function gunakanLokasi(){
 
-navigator.geolocation.getCurrentPosition(function(pos){
+popup("📡 Mencari lokasi Anda...");
+
+if(!navigator.geolocation){
+popup("HP tidak mendukung GPS");
+return;
+}
+
+navigator.geolocation.getCurrentPosition(
+
+function(pos){
+
+// hapus popup loading
+document.querySelectorAll("body > div").forEach(el=>{
+if(el.style.zIndex=="9999") el.remove();
+});
+
+setLokasi(
+pos.coords.latitude,
+pos.coords.longitude
+);
+
+},
+
+function(error){
+
+// hapus popup loading
+document.querySelectorAll("body > div").forEach(el=>{
+if(el.style.zIndex=="9999") el.remove();
+});
+
+popup("❌ Tidak bisa mendapatkan lokasi. Aktifkan GPS.");
+
+},
+
+{
+enableHighAccuracy:false,
+timeout:2000,
+maximumAge:0
+}
+
+);
+
+}
 
 setLokasi(
 pos.coords.latitude,
