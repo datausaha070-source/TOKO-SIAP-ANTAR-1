@@ -75,6 +75,8 @@ top:auto;
 
 <div id="infoZona" class="card">Belum memilih lokasi</div>
 
+<input type="text" id="namaPembeli" placeholder="Nama Pembeli">
+
 <input type="tel" id="waPembeli" placeholder="Nomor WhatsApp Aktif">
 
 <div class="checkout" id="btnCheckout" onclick="lanjutBayar()">Checkout</div>
@@ -178,7 +180,13 @@ popup("Pilih lokasi pengiriman dulu");
 return;
 }
 
+let namaPembeli = document.getElementById("namaPembeli").value.trim();
 let noWa = document.getElementById("waPembeli").value.trim();
+
+if(!namaPembeli){
+popup("Isi nama pembeli dulu");
+return;
+}
 
 if(!noWa){
 popup("Isi nomor WhatsApp dulu");
@@ -191,9 +199,9 @@ lng: tujuanLng,
 desa: namaDesa,
 kecamatan: namaKecamatan,
 ongkir: ongkir,
-noWa: noWa
+noWa: noWa,
+namaPembeli: namaPembeli
 }));
-
 window.location.href = "bayar.html";
 
 }
