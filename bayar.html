@@ -1,15 +1,20 @@
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html>
 <head>
 <meta charset="UTF-8">
 <title>Checkout Pembayaran</title>
-<meta name="viewport" content="width=device-width, initial-scale=1"><style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
 
 body{
 font-family:Arial;
 background:#f5f5f5;
 margin:0;
-padding-bottom:100px;
+padding-bottom:80px;
 }
+
+/* HEADER */
 
 .header{
 background:white;
@@ -27,6 +32,8 @@ margin-right:10px;
 cursor:pointer;
 }
 
+/* CARD */
+
 .card{
 background:white;
 margin:12px;
@@ -34,6 +41,8 @@ padding:16px;
 border-radius:12px;
 box-shadow:0 2px 6px rgba(0,0,0,0.1);
 }
+
+/* PRODUK */
 
 .produk{
 border-bottom:1px solid #eee;
@@ -49,6 +58,8 @@ color:#16a34a;
 font-weight:bold;
 }
 
+/* PAYMENT */
+
 .pay{
 border:1px solid #ddd;
 padding:12px;
@@ -61,6 +72,8 @@ cursor:pointer;
 border:2px solid #16a34a;
 }
 
+/* TOTAL */
+
 .total{
 display:flex;
 justify-content:space-between;
@@ -68,26 +81,15 @@ margin-top:6px;
 font-size:14px;
 }
 
-.total span:first-child{
-color:#555;
-}
-
 .total span:last-child{
 font-weight:bold;
 }
-.footer{
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
-background:white;
-padding:12px;
-box-shadow:0 -2px 8px rgba(0,0,0,0.1);
-}
+
+/* BUTTON */
 
 .btn{
 width:100%;
-padding:16px;
+padding:14px;
 border:none;
 border-radius:10px;
 background:#ee4d2d;
@@ -95,7 +97,10 @@ color:white;
 font-size:16px;
 font-weight:bold;
 cursor:pointer;
+margin-top:10px;
 }
+
+/* REKENING */
 
 #rekeningBox{
 display:none;
@@ -106,23 +111,55 @@ border-radius:8px;
 font-size:14px;
 }
 
-</style></head><body><div class="header">
+</style>
+</head>
+
+<body>
+
+<div class="header">
 <span class="back" onclick="window.location='cart.html'">⬅</span>
 Checkout
-</div><div class="card">
+</div>
+
+<!-- PRODUK -->
+
+<div class="card">
+
 <b>Produk Dibeli</b>
+
 <div id="produkList"></div>
-</div><div class="card"><b>Metode Pembayaran</b>
+
+</div>
+
+<!-- METODE PEMBAYARAN -->
+
+<div class="card">
+
+<b>Metode Pembayaran</b>
 
 <div class="pay" onclick="pilihMetode('COD',this)">
 💵 COD (Bayar di Tempat)
-</div><div class="pay" onclick="tampilTransfer()">
+</div>
+
+<div class="pay" onclick="tampilTransfer()">
 🏦 Transfer Bank
-</div><div id="transferBox" style="display:none"><div class="pay" onclick="pilihTransfer('BRI','0046 0105 1342 504','INA KHOZINATUL ASROR',this)">
+</div>
+
+<div id="transferBox" style="display:none">
+
+<div class="pay" onclick="pilihTransfer('BRI','0046 0105 1342 504','INA KHOZINATUL ASROR',this)">
 🏦 Bank BRI
-</div><div class="pay" onclick="pilihTransfer('DANA','082319264646','YUDI ALIYUDIN',this)">
+</div>
+
+<div class="pay" onclick="pilihTransfer('DANA','082319264646','YUDI ALIYUDIN',this)">
 💳 DANA
-</div></div><div id="rekeningBox"><b>Transfer ke:</b><br><br>
+</div>
+
+</div>
+
+<div id="rekeningBox">
+
+<b>Transfer ke:</b><br><br>
 
 Bank BRI<br>
 0046 0105 1342 504<br>
@@ -132,7 +169,11 @@ DANA<br>
 082319264646<br>
 a.n YUDI ALIYUDIN
 
-</div></div><div class="card"><b>Ringkasan Pembayaran</b>
+</div>
+
+</div>
+
+<!-- RINGKASAN -->
 
 <div class="card">
 
@@ -164,15 +205,34 @@ Total <span id="jumlahItem"></span> Produk
 <span id="tTotal"></span>
 </div>
 
-<br>
-
 <button class="btn" onclick="buatPesanan()">
 Buat Pesanan
 </button>
 
 </div>
 
+
 <script>
+
+/* NORMALISASI WA */
+
+function normalisasiWA(no){
+
+no = no.replace(/\D/g,'');
+
+if(no.startsWith("0")){
+no = "62"+no.substring(1);
+}
+
+if(no.startsWith("8")){
+no = "62"+no;
+}
+
+return no;
+
+}
+
+/* DATA */
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 let checkoutData = JSON.parse(localStorage.getItem("checkoutData")) || {};
@@ -182,6 +242,8 @@ let bank="";
 let norek="";
 let an="";
 
+/* HITUNG PRODUK */
+
 let total=0;
 let totalItem=0;
 
@@ -189,11 +251,11 @@ let html="";
 
 cart.forEach(p=>{
 
-let sub = p.harga*p.qty;
+let sub = p.harga * p.qty;
 
 total += sub;
 totalItem += p.qty;
-document.getElementById("jumlahItem").innerText = totalItem;
+
 html+=`
 <div class="produk">
 <div class="nama">${p.nama}</div>
@@ -205,27 +267,40 @@ Qty : ${p.qty}<br>
 });
 
 document.getElementById("produkList").innerHTML=html;
+document.getElementById("jumlahItem").innerText=totalItem;
+
+/* ONGKIR */
 
 let ongkir = checkoutData.ongkir || 0;
 
-let noWa = normalisasiWA(checkoutData.noWa);
+/* DATABASE PELANGGAN */
+
+let noWa = normalisasiWA(checkoutData.noWa || "");
+
 let db = JSON.parse(localStorage.getItem("dbPelanggan")) || {};
 
 if(!db[noWa]){
-db[noWa] = 0;
+db[noWa]=0;
 }
 
 let trx = db[noWa];
+
+/* LEVEL */
+
 let level="Member Baru";
 
 if(trx>=3) level="Member Silver";
 if(trx>=7) level="Member Gold";
 if(trx>=15) level="Member Prioritas";
 
+/* DISKON */
+
 let diskon=0;
 
 if(level=="Member Gold") diskon=5000;
 if(level=="Member Prioritas") diskon=10000;
+
+/* TOTAL */
 
 let totalBayar = total + ongkir - diskon;
 
@@ -234,18 +309,17 @@ document.getElementById("tOngkir").innerText="Rp "+ongkir.toLocaleString("id-ID"
 document.getElementById("tDiskon").innerText="Rp "+diskon.toLocaleString("id-ID");
 document.getElementById("tTotal").innerText="Rp "+totalBayar.toLocaleString("id-ID");
 
+/* PILIH METODE */
+
 function pilihMetode(m,el){
 
 if(m==="COD"){
 
 if(trx < 10){
 
-let sisa = 10 - trx;
-
 popupCOD(
 "COD belum tersedia.<br><br>"+
-"Belanja <b>"+sisa+" kali lagi</b><br>"+
-"untuk membuka fitur COD."
+"Belanja "+(10-trx)+" kali lagi untuk membuka COD"
 );
 
 return;
@@ -261,6 +335,8 @@ document.querySelectorAll(".pay").forEach(x=>x.classList.remove("active"));
 el.classList.add("active");
 
 }
+
+/* TRANSFER */
 
 function tampilTransfer(){
 
@@ -283,18 +359,40 @@ el.classList.add("active");
 
 }
 
+/* POPUP */
+
 function popupCOD(pesan){
 
-document.getElementById("pesanCOD").innerHTML=pesan;
-document.getElementById("popupCOD").style.display="flex";
+let box=document.createElement("div");
+
+box.style.position="fixed";
+box.style.top="0";
+box.style.left="0";
+box.style.width="100%";
+box.style.height="100%";
+box.style.background="rgba(0,0,0,0.5)";
+box.style.display="flex";
+box.style.alignItems="center";
+box.style.justifyContent="center";
+box.style.zIndex="9999";
+
+box.innerHTML=`
+<div style="background:white;padding:20px;border-radius:12px;width:80%;max-width:300px;text-align:center">
+
+<h3 style="color:#15803d;margin-top:0">TOKO SIAP ANTAR</h3>
+
+<p>${pesan}</p>
+
+<button onclick="this.parentElement.parentElement.remove()" style="background:#15803d;color:white;border:none;padding:10px 20px;border-radius:6px">OK</button>
+
+</div>
+`;
+
+document.body.appendChild(box);
 
 }
 
-function tutupPopup(){
-
-document.getElementById("popupCOD").style.display="none";
-
-}
+/* BUAT PESANAN */
 
 function buatPesanan(){
 
@@ -303,30 +401,34 @@ alert("Pilih metode pembayaran dulu");
 return;
 }
 
+/* UPDATE TRANSAKSI */
+
+db[noWa]++;
+
+localStorage.setItem("dbPelanggan", JSON.stringify(db));
+
+trx = db[noWa];
+
+/* LOKASI */
+
 let lat = checkoutData.lat;
 let lng = checkoutData.lng;
+
 let desa = checkoutData.desa;
 let kecamatan = checkoutData.kecamatan;
 
 let linkMaps="https://www.google.com/maps/search/?api=1&query="+lat+","+lng;
-/* UPDATE DATABASE PELANGGAN */
 
-let db = JSON.parse(localStorage.getItem("dbPelanggan")) || {};
+/* WAKTU */
 
-if(!db[checkoutData.noWa]){
-db[checkoutData.noWa] = 0;
-}
-
-db[checkoutData.noWa]++;
-
-localStorage.setItem("dbPelanggan", JSON.stringify(db));
-
-let trx = db[checkoutData.noWa];
 let now=new Date();
+
 let orderId=Date.now();
 
 let tanggal=now.toLocaleDateString("id-ID");
 let jam=now.toLocaleTimeString("id-ID");
+
+/* DETAIL */
 
 let detail="";
 
@@ -339,24 +441,25 @@ detail+=
 
 });
 
+/* PEMBAYARAN */
+
 let infoBayar="";
 
 if(metode=="COD"){
-
 infoBayar="Metode Pembayaran : COD (Bayar di Tempat)";
-
 }else{
-
 infoBayar=
 "Metode Pembayaran : TRANSFER\n\n"+
 "Bank "+bank+"\n"+
 norek+"\n"+
 "a.n "+an+"\n\n"+
 "Status : MENUNGGU TRANSFER";
-
 }
 
+/* PESAN WA */
+
 let pesan=
+
 "━━━━━━━━━━━━━━━━━━━━\n"+
 "🧾 INVOICE PESANAN\n"+
 "━━━━━━━━━━━━━━━━━━━━\n\n"+
@@ -368,7 +471,7 @@ let pesan=
 "⭐ Status Pelanggan : "+level+"\n\n"+
 
 "👤 Nama Pembeli:\n"+(checkoutData.namaPembeli || "Pelanggan")+"\n"+
-"📱 Nomor WhatsApp:\n"+checkoutData.noWa+"\n\n"+
+"📱 Nomor WhatsApp:\n"+noWa+"\n\n"+
 
 "━━━━━━━━━━━━━━━━━━━━\n"+
 "📦 DETAIL PRODUK\n"+
@@ -406,54 +509,7 @@ window.open(
 
 }
 
-</script><div id="popupCOD" style="
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.5);
-align-items:center;
-justify-content:center;
-z-index:9999;
-"><div style="
-background:white;
-padding:20px;
-border-radius:10px;
-width:80%;
-max-width:320px;
-text-align:center;
-"><h3 style="color:#15803d;margin-top:0">
-TOKO SIAP ANTAR
-</h3><p id="pesanCOD"></p><button onclick="tutupPopup()" style="background:#15803d;color:white;border:none;padding:10px 20px;border-radius:6px">
-OK
-</button></div></div>
-<script>
-
-function normalisasiWA(no){
-
-no = no.replace(/\D/g,'');
-
-if(no.startsWith("0")){
-no = "62" + no.substring(1);
-}
-
-if(no.startsWith("8")){
-no = "62" + no;
-}
-
-return no;
-
-}
-if(trx < 10){
-popupCOD(
-"COD belum tersedia.<br><br>"+
-"Belanja "+(10-trx)+" kali lagi untuk membuka COD"
-);
-return;
-}
-
 </script>
+
 </body>
 </html>
