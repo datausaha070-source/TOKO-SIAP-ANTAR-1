@@ -224,8 +224,8 @@ let desa = checkoutData.desa || "-";
 let kecamatan = checkoutData.kecamatan || "-";
 let ongkir = checkoutData.ongkir || 0;
 
+let namaPembeli = checkoutData.namaPembeli || "-";
 let noWa = normalisasiWA(checkoutData.noWa || "");
-
 let linkMaps =
 "https://www.google.com/maps/search/?api=1&query="
 + lat + "," + lng;
@@ -314,7 +314,8 @@ let pesan =
 "🔢 Transaksi ke : "+transaksiKe+"\n"+
 "⭐ Status Pelanggan : "+level+"\n\n"+
 
-"👤 Nomor Pembeli:\n"+noWa+"\n\n"+
+"👤 Nama Pembeli:\n"+namaPembeli+"\n"+
+"📱 Nomor WhatsApp:\n"+noWa+"\n\n"+
 
 "━━━━━━━━━━━━━━━━━━━━\n"+
 "📦 DETAIL PRODUK\n"+
