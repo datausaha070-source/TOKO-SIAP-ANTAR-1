@@ -21,6 +21,7 @@ color:#333;
 }
 
 /* HEADER */
+
 .header{
 background:white;
 display:flex;
@@ -40,42 +41,9 @@ width:100%;
 height:4px;
 background:linear-gradient(90deg,#16a34a,#f97316);
 }
-.menu-pro{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:10px;
-margin:15px;
-}
 
-.menu-pro a{
-
-padding:10px 18px;
-
-background:linear-gradient(145deg,#16a34a,#15803d);
-
-color:white;
-
-border-radius:50px;
-
-text-decoration:none;
-
-font-size:13px;
-
-border:3px solid #ff9800; /* lingkaran orange */
-
-box-shadow:0 6px 15px rgba(0,0,0,0.25);
-
-transition:0.2s;
-
-}
-
-.menu-pro a:hover{
-
-transform:scale(1.05);
-
-}
 /* SLIDER */
+
 .slider{
 width:100%;
 overflow:hidden;
@@ -99,6 +67,7 @@ border-radius:10px;
 }
 
 /* LOGO */
+
 .logo-tengah{
 position:absolute;
 left:50%;
@@ -128,6 +97,7 @@ margin-top:-130px;
 }
 
 /* MOTOR */
+
 .motor-jalan{
 position:relative;
 height:40px;
@@ -178,6 +148,7 @@ animation:asapgerak 1s linear infinite;
 }
 
 /* RUNNING TEXT */
+
 .running-text{
 background:#16a34a;
 color:white;
@@ -192,6 +163,7 @@ background:linear-gradient(90deg,#16a34a,#f97316);
 }
 
 /* HERO */
+
 .hero{
 padding:35px 20px;
 text-align:center;
@@ -211,6 +183,7 @@ margin-bottom:20px;
 }
 
 /* BUTTON */
+
 .btn-modern{
 display:inline-block;
 padding:12px 20px;
@@ -228,6 +201,48 @@ background:linear-gradient(145deg,#16a34a,#15803d);
 
 .btn-orange{
 background:linear-gradient(145deg,#f59e0b,#ea580c);
+}
+
+/* SEARCH */
+
+.search-box{
+text-align:center;
+margin:15px;
+}
+
+.search-box input{
+width:90%;
+max-width:420px;
+padding:10px;
+border-radius:10px;
+border:1px solid #ccc;
+font-size:14px;
+}
+
+/* MENU */
+
+.menu-pro{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:10px;
+margin:15px;
+}
+
+.menu-pro a{
+padding:10px 18px;
+background:linear-gradient(145deg,#16a34a,#15803d);
+color:white;
+border-radius:50px;
+text-decoration:none;
+font-size:13px;
+border:3px solid #ff9800;
+box-shadow:0 6px 15px rgba(0,0,0,0.25);
+transition:0.2s;
+}
+
+.menu-pro a:hover{
+transform:scale(1.05);
 }
 
 /* KATEGORI */
@@ -249,12 +264,17 @@ text-align:center;
 padding:12px;
 box-shadow:0 5px 12px rgba(0,0,0,0.12);
 text-decoration:none;
+transition:0.2s;
+}
+
+.kategori-box:hover{
+transform:translateY(-4px);
+box-shadow:0 8px 20px rgba(0,0,0,0.2);
 }
 
 .kategori-box img{
 width:100%;
 max-width:160px;
-height:auto;
 border-radius:12px;
 display:block;
 margin:auto;
@@ -283,7 +303,7 @@ cursor:pointer;
 z-index:9999;
 }
 
-/* ADMIN BUTTON */
+/* ADMIN */
 
 .admin-upload-box{
 text-align:center;
@@ -309,31 +329,23 @@ font-weight:bold;
 font-size:15px;
 border:3px solid #facc15;
 box-shadow:0 6px 15px rgba(0,0,0,0.25);
-transition:0.2s;
 }
 
-.btn-upload-admin:hover{
-transform:scale(1.05);
-}
-/* TABLET */
+/* RESPONSIVE */
+
 @media (min-width:768px){
-
 .kategori-container{
 grid-template-columns:repeat(3,1fr);
 max-width:1000px;
 }
-
 }
 
-/* DESKTOP */
 @media (min-width:1100px){
-
 .kategori-container{
 grid-template-columns:repeat(4,1fr);
 max-width:1400px;
 padding:25px;
 }
-
 }
 
 </style>
@@ -341,12 +353,12 @@ padding:25px;
 
 <body>
 
-<!-- CART FLOAT -->
 <div id="cartFloat" onclick="window.location.href='cart.html'">
 🛒 Keranjang
 </div>
 
 <!-- HEADER -->
+
 <div class="header">
 
 <div class="slider">
@@ -380,6 +392,7 @@ padding:25px;
 </div>
 
 <!-- MOTOR -->
+
 <div class="motor-jalan">
 <div class="motor-kirim">
 <img src="motor-icon.png">
@@ -389,6 +402,7 @@ padding:25px;
 </div>
 
 <!-- RUNNING TEXT -->
+
 <div class="running-text">
 <marquee scrollamount="10">
 🏍️ Selamat Datang di TOKO SIAP ANTAR • Belanja Mudah Tanpa Keluar Rumah • Kami Siap Antar ke Lokasi Anda
@@ -398,6 +412,7 @@ padding:25px;
 <div class="garis"></div>
 
 <!-- HERO -->
+
 <div class="hero">
 
 <h2>TOKO SIAP ANTAR</h2>
@@ -415,12 +430,17 @@ Estimasi 1 Jam Pesanan Sampai ke Lokasi
 <h2 style="margin-top:30px;">Pilih Kategori Produk</h2>
 
 </div>
+
+<!-- SEARCH -->
+
 <div class="search-box">
-  <input type="text" id="searchInput" placeholder="🔎 Cari produk... (LCD, baterai, IC)">
+<input type="text" placeholder="🔎 Cari produk... (LCD, baterai, IC)">
 </div>
+
 <!-- MENU -->
+
 <div class="menu-pro">
-<a href="lcdhp.html?kategori=LCD HP">📱LCD HP</a>
+<a href="lcdhp.html?kategori=LCD HP">📱 LCD HP</a>
 <a href="battery.html?kategori=BATTERY HP">🔋 BATTERY HP</a>
 <a href="sparepart.html?kategori=SPAREPART">🧩 TOOLS & SPAREPART</a>
 <a href="flexi.html?kategori=FLEXI">🚧 FLEXIBLE</a>
@@ -433,7 +453,7 @@ Estimasi 1 Jam Pesanan Sampai ke Lokasi
 
 <a href="part-hp.html" class="kategori-box">
 <img src="promo1.png">
-<p>Seperpart HP</p>
+<p>Sparepart HP</p>
 </a>
 
 <a href="bibit.html" class="kategori-box">
@@ -470,10 +490,10 @@ Estimasi 1 Jam Pesanan Sampai ke Lokasi
 <img src="promo11.png">
 <p>Accessories</p>
 </a>
-  
+
 <a href="mobil.html" class="kategori-box">
 <img src="promo12.png">
-<p>Sparepart Mobil & Mobil</p>
+<p>Sparepart Mobil</p>
 </a>
 
 </div>
