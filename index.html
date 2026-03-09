@@ -98,145 +98,7 @@ margin-top:-130px;
 position:relative;
 height:40px;
 overflow:hidden;
-}
-
-.motor-kirim{
-position:absolute;
-left:-120px;
-animation:jalanmotor 12s linear infinite;
-}
-
-.motor-kirim img{
-height:36px;
-}
-
-@keyframes jalanmotor{
-0%{left:-120px;}
-100%{left:100%;}
-}
-
-/* RUNNING TEXT */
-.running-text{
-background:#16a34a;
-color:white;
-font-weight:bold;
-font-size:14px;
-padding:6px;
-}
-
-.garis{
-height:3px;
-background:linear-gradient(90deg,#16a34a,#f97316);
-}
-
-/* ===== HERO ===== */
-.hero{
-padding:35px 20px;
-text-align:center;
-background:white;
-}
-
-.hero h2{
-color:var(--primary);
-font-size:36px;
-font-weight:800;
-margin-bottom:15px;
-}
-
-.hero p{
-color:#666;
-font-size:18px;
-margin-bottom:20px;
-}
-
-/* ===== BUTTON ===== */
-.btn-modern{
-display:inline-block;
-padding:12px 20px;
-border-radius:40px;
-color:white;
-text-decoration:none;
-font-weight:600;
-box-shadow:0 6px 15px rgba(0,0,0,0.25);
-margin:5px;
-}
-
-.btn-green{
-background:linear-gradient(145deg,#16a34a,#15803d);
-}
-
-.btn-orange{
-background:linear-gradient(145deg,#f59e0b,#ea580c);
-}
-
-.hero{
-padding:35px 20px;
-text-align:center;
-background:white;
-}
-
-.hero h2{
-color:#16a34a;
-font-size:26px;
-margin-bottom:10px;
-}
-
-/* KATEGORI GRID */
-
-.kategori-container{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:14px;
-padding:14px;
-max-width:700px;
-margin:auto;
-}
-
-.kategori-box{
-background:white;
-border-radius:14px;
-border:3px solid #f97316;
-text-align:center;
-padding:12px;
-box-shadow:0 5px 12px rgba(0,0,0,0.12);
-}
-
-.kategori-box img{
-width:100%;
-max-width:160px;
-height:auto;
-border-radius:12px;
-display:block;
-margin:auto;
-}
-
-.kategori-box p{
-margin-top:8px;
-font-weight:bold;
-color:#15803d;
-font-size:14px;
-}
-
-/* CART FLOAT */
-
-#cartFloat{
-position:fixed;
-top:450px;
-left:15px;
-background:linear-gradient(145deg,#16a34a,#15803d);
-color:white;
-padding:10px 16px;
-border-radius:50px;
-border:3px solid #ff9800;
-box-shadow:0 8px 20px rgba(0,0,0,0.25);
-cursor:pointer;
-z-index:9999;
-}
-.motor-jalan{
-position:relative;
-height:40px;
 margin-bottom:-10px;
-overflow:hidden;
 z-index:5;
 }
 
@@ -277,16 +139,118 @@ animation:asapgerak 1s linear infinite;
 }
 
 @keyframes asapgerak{
-0%{
-transform:translateX(0) scaleX(-1);
-opacity:0.8;
+0%{transform:translateX(0) scaleX(-1);opacity:0.8;}
+100%{transform:translateX(-15px) scaleX(-1);opacity:0;}
 }
 
-100%{
-transform:translateX(-15px) scaleX(-1);
-opacity:0;
+/* RUNNING TEXT */
+.running-text{
+background:#16a34a;
+color:white;
+font-weight:bold;
+font-size:14px;
+padding:6px;
 }
+
+.garis{
+height:3px;
+background:linear-gradient(90deg,#16a34a,#f97316);
 }
+
+/* HERO */
+.hero{
+padding:35px 20px;
+text-align:center;
+background:white;
+}
+
+.hero h2{
+color:#16a34a;
+font-size:26px;
+margin-bottom:10px;
+}
+
+.hero p{
+color:#666;
+font-size:16px;
+margin-bottom:20px;
+}
+
+/* BUTTON */
+.btn-modern{
+display:inline-block;
+padding:12px 20px;
+border-radius:40px;
+color:white;
+text-decoration:none;
+font-weight:600;
+box-shadow:0 6px 15px rgba(0,0,0,0.25);
+margin:5px;
+}
+
+.btn-green{
+background:linear-gradient(145deg,#16a34a,#15803d);
+}
+
+.btn-orange{
+background:linear-gradient(145deg,#f59e0b,#ea580c);
+}
+
+/* KATEGORI */
+
+.kategori-container{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:14px;
+padding:14px;
+max-width:700px;
+margin:auto;
+}
+
+.kategori-box{
+background:white;
+border-radius:14px;
+border:3px solid #f97316;
+text-align:center;
+padding:12px;
+box-shadow:0 5px 12px rgba(0,0,0,0.12);
+text-decoration:none;
+}
+
+.kategori-box img{
+width:100%;
+max-width:160px;
+height:auto;
+border-radius:12px;
+display:block;
+margin:auto;
+}
+
+.kategori-box p{
+margin-top:8px;
+font-weight:bold;
+color:#15803d;
+font-size:14px;
+}
+
+/* CART FLOAT */
+
+#cartFloat{
+position:fixed;
+top:450px;
+left:15px;
+background:linear-gradient(145deg,#16a34a,#15803d);
+color:white;
+padding:10px 16px;
+border-radius:50px;
+border:3px solid #ff9800;
+box-shadow:0 8px 20px rgba(0,0,0,0.25);
+cursor:pointer;
+z-index:9999;
+}
+
+/* ADMIN BUTTON */
+
 .admin-upload-box{
 text-align:center;
 margin-top:40px;
@@ -301,38 +265,23 @@ margin-bottom:8px;
 }
 
 .btn-upload-admin{
-
 display:inline-block;
 padding:14px 24px;
-
 background:linear-gradient(90deg,#22c55e,#f97316);
-
 color:white;
 text-decoration:none;
-
 border-radius:40px;
-
 font-weight:bold;
 font-size:15px;
-
 border:3px solid #facc15;
-
 box-shadow:0 6px 15px rgba(0,0,0,0.25);
-
 transition:0.2s;
-
 }
 
 .btn-upload-admin:hover{
 transform:scale(1.05);
 }
-.kategori-img{
-width:100px;
-height:100px;
-object-fit:cover;
-border-radius:10px;
-margin-bottom:8px;
-}
+
 </style>
 </head>
 
@@ -378,23 +327,22 @@ margin-bottom:8px;
 
 <!-- MOTOR -->
 <div class="motor-jalan">
-  <div class="motor-kirim">
-    <img src="motor-icon.png">
-    <div class="teks-kirim">📦 Pesanan OTW</div>
-    <div class="asap">💨</div>
-  </div>
+<div class="motor-kirim">
+<img src="motor-icon.png">
+<div class="teks-kirim">📦 Pesanan OTW</div>
+<div class="asap">💨</div>
+</div>
 </div>
 
 <!-- RUNNING TEXT -->
 <div class="running-text">
 <marquee scrollamount="10">
-
 🏍️ Selamat Datang di TOKO SIAP ANTAR • Belanja Mudah Tanpa Keluar Rumah • Kami Siap Antar ke Lokasi Anda
-
 </marquee>
 </div>
 
 <div class="garis"></div>
+
 <!-- HERO -->
 <div class="hero">
 
@@ -410,13 +358,11 @@ margin-bottom:8px;
 Estimasi 1 Jam Pesanan Sampai ke Lokasi
 </a>
 
-<div class="hero">
-<h2>Pilih Kategori Produk</h2>
+<h2 style="margin-top:30px;">Pilih Kategori Produk</h2>
+
 </div>
 
 <!-- KATEGORI -->
-
-<div class="kategori-container">
 
 <div class="kategori-container">
 
@@ -471,6 +417,9 @@ Estimasi 1 Jam Pesanan Sampai ke Lokasi
 </a>
 
 </div>
+
+<!-- ADMIN -->
+
 <div class="admin-upload-box">
 
 <div class="admin-text">Khusus Admin</div>
@@ -480,5 +429,6 @@ Estimasi 1 Jam Pesanan Sampai ke Lokasi
 </a>
 
 </div>
+
 </body>
 </html>
