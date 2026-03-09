@@ -186,6 +186,13 @@ no = "62" + no;
 return no;
 
 }
+if(trx < 10){
+popupCOD(
+"COD belum tersedia.<br><br>"+
+"Belanja "+(10-trx)+" kali lagi untuk membuka COD"
+);
+return;
+}
 <script>
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -381,7 +388,7 @@ let pesan=
 "🔢 Transaksi ke : "+trx+"\n"+
 "⭐ Status Pelanggan : "+level+"\n\n"+
 
-"👤 Nama Pembeli:\n"+checkoutData.namaPembeli+"\n"+
+"👤 Nama Pembeli:\n"+(checkoutData.namaPembeli || "Pelanggan")+"\n"+
 "📱 Nomor WhatsApp:\n"+checkoutData.noWa+"\n\n"+
 
 "━━━━━━━━━━━━━━━━━━━━\n"+
