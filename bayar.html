@@ -171,6 +171,21 @@ Buat Pesanan
 </button>
 
 </div>
+function normalisasiWA(no){
+
+no = no.replace(/\D/g,'');
+
+if(no.startsWith("0")){
+no = "62" + no.substring(1);
+}
+
+if(no.startsWith("8")){
+no = "62" + no;
+}
+
+return no;
+
+}
 <script>
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -207,8 +222,7 @@ document.getElementById("produkList").innerHTML=html;
 
 let ongkir = checkoutData.ongkir || 0;
 
-let noWa = checkoutData.noWa;
-
+let noWa = normalisasiWA(checkoutData.noWa);
 let db = JSON.parse(localStorage.getItem("dbPelanggan")) || {};
 
 if(!db[noWa]){
