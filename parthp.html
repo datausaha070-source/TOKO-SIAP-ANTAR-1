@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PART HP | TOKO SIAP ANTAR</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+background:#f4f6f9;
+}
+
+/* PRODUK GRID */
+
+.produk-container{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+padding:10px;
+max-width:1000px;
+margin:auto;
+}
+
+.produk-card{
+background:white;
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 6px 18px rgba(0,0,0,0.12);
+display:flex;
+flex-direction:column;
+}
+
+.produk-img-box{
+height:180px;
+background:linear-gradient(135deg,#16a34a,#f97316);
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.produk-img{
+max-height:140px;
+max-width:80%;
+object-fit:contain;
+border-radius:16px;
+}
+
+.produk-info{
+padding:10px;
+display:flex;
+flex-direction:column;
+flex:1;
+}
+
+.produk-nama{
+font-size:13px;
+font-weight:700;
+margin-bottom:4px;
+}
+
+.produk-deskripsi{
+font-size:12px;
+color:#666;
+margin-bottom:6px;
+}
+
+.produk-harga{
+color:#ff6a00;
+font-size:14px;
+font-weight:bold;
+margin-bottom:8px;
+}
+
+.btn-cart{
+border:none;
+background:#1faa59;
+color:white;
+padding:8px;
+border-radius:6px;
+cursor:pointer;
+}
+
+@media (min-width:900px){
+
+.produk-container{
+grid-template-columns:repeat(5,1fr);
+max-width:1400px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<h2 style="text-align:center;margin:20px">
+📱 PART HP
+</h2>
+
+<div id="produkList" class="produk-container"></div>
+
+<script>
+
+const sheetURL="https://docs.google.com/spreadsheets/d/19AfachAS9ZyNuut61RB1wqyI_AI6BsmNT1SIWhmSIn8/gviz/tq?sheet=PART%20HP";
+
+function convertDrive(link){
+
+if(!link) return "";
+
+let id="";
+
+if(link.includes("id=")){
+id = link.split("id=")[1].split("&")[0];
+}
+else if(link.includes("/d/")){
+id = link.split("/d/")[1].split("/")[0];
+}
+else{
+return link;
+}
+
+return "https://drive.google.com/thumbnail?id="+id+"&sz=w1000";
+
+}
+
+fetch(sheetURL)
+
+.then(res=>res.text())
+
+.then(data=>{
+
+const json=JSON.parse(data.substring(47).slice(0,-2));
+
+let rows=json.table.rows;
+
+let html="";
+
+rows.forEach(r=>{
+
+let nama=r.c[1]?.v;
+let deskripsi=r.c[2]?.v;
+let harga=r.c[3]?.v;
+let foto=convertDrive(r.c[4]?.v);
+
+if(!nama) return;
+
+html+=`
+
+<div class="produk-card">
+
+<div class="produk-img-box">
+<img src="${foto}" class="produk-img">
+</div>
+
+<div class="produk-info">
+
+<div class="produk-nama">${nama}</div>
+
+<div class="produk-deskripsi">
+${deskripsi ?? ""}
+</div>
+
+<div class="produk-harga">
+Rp ${Number(harga).toLocaleString()}
+</div>
+
+<button class="btn-cart">
++ Keranjang
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+document.getElementById("produkList").innerHTML=html;
+
+});
+
+</script>
+
+</body>
+</html>
