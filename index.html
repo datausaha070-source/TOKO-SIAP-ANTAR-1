@@ -347,7 +347,33 @@ max-width:1400px;
 padding:25px;
 }
 }
+.search-box{
+text-align:center;
+margin:20px;
+}
 
+.search-box input{
+
+width:90%;
+max-width:450px;
+
+padding:12px;
+
+border-radius:30px;
+
+border:2px solid #15803d;
+
+font-size:14px;
+
+outline:none;
+
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+
+}
+
+.search-box input:focus{
+border-color:#f97316;
+}
 </style>
 </head>
 
@@ -434,9 +460,8 @@ Estimasi 1 Jam Pesanan Sampai ke Lokasi
 <!-- SEARCH -->
 
 <div class="search-box">
-<input type="text" placeholder="🔎 Cari produk... (LCD, baterai, IC)">
+<input type="text" id="searchInput" placeholder="🔎 Cari produk... contoh: LCD, baterai, bibit">
 </div>
-
 <!-- MENU -->
 
 <div class="menu-pro">
@@ -451,51 +476,55 @@ Estimasi 1 Jam Pesanan Sampai ke Lokasi
 
 <div class="kategori-container">
 
-<a href="part-hp.html" class="kategori-box">
+<a href="part-hp.html" class="kategori-box" data-key="hp lcd baterai ic sparepart servis">
 <img src="promo1.png">
-<p>Sparepart HP</p>
+<p class="nama-kategori">Sparepart HP</p>
 </a>
 
-<a href="bibit.html" class="kategori-box">
+<a href="bibit.html" class="kategori-box" data-key="bibit tanaman pohon">
 <img src="promo2.png">
-<p>Bibit Pohon</p>
+<p class="nama-kategori">Bibit Pohon</p>
 </a>
 
-<a href="buah.html" class="kategori-box">
+<a href="buah.html" class="kategori-box" data-key="buah apel jeruk pisang">
 <img src="promo3.png">
-<p>Buah Buahan</p>
+<p class="nama-kategori">Buah Buahan</p>
 </a>
 
-<a href="makanan.html" class="kategori-box">
+<a href="makanan.html" class="kategori-box" data-key="makanan snack roti kue">
 <img src="promo4.png">
-<p>Makanan Ringan</p>
+<p class="nama-kategori">Makanan Ringan</p>
 </a>
 
-<a href="sembako.html" class="kategori-box">
+<a href="sembako.html" class="kategori-box" data-key="beras minyak gula telur">
 <img src="promo5.png">
-<p>Sembako</p>
+<p class="nama-kategori">Sembako</p>
 </a>
 
-<a href="kecantikan.html" class="kategori-box">
+<a href="kecantikan.html" class="kategori-box" data-key="makeup lipstik bedak skincare">
 <img src="promo9.png">
-<p>Kecantikan</p>
+<p class="nama-kategori">Kecantikan</p>
 </a>
 
-<a href="pakaian.html" class="kategori-box">
+<a href="pakaian.html" class="kategori-box" data-key="baju celana kaos pakaian">
 <img src="promo10.png">
-<p>Pakaian</p>
+<p class="nama-kategori">Pakaian</p>
 </a>
 
-<a href="accesories.html" class="kategori-box">
+<a href="accesories.html" class="kategori-box" data-key="jam gelang kalung tas">
 <img src="promo11.png">
-<p>Accessories</p>
+<p class="nama-kategori">Accessories</p>
 </a>
 
-<a href="mobil.html" class="kategori-box">
+<a href="motor.html" class="kategori-box" data-key="sparepart motor ban oli">
 <img src="promo12.png">
-<p>Sparepart Mobil</p>
+<p class="nama-kategori">Sparepart Motor</p>
 </a>
 
+<a href="mobil.html" class="kategori-box" data-key="sparepart mobil aki ban">
+<img src="promo13.png">
+<p class="nama-kategori">Sparepart Mobil</p>
+</a>
 </div>
 
 <!-- ADMIN -->
@@ -509,6 +538,30 @@ Estimasi 1 Jam Pesanan Sampai ke Lokasi
 </a>
 
 </div>
+<script>
 
+const searchInput = document.getElementById("searchInput");
+const kategori = document.querySelectorAll(".kategori-box");
+
+searchInput.addEventListener("keyup", function(){
+
+let keyword = searchInput.value.toLowerCase();
+
+kategori.forEach(box => {
+
+let nama = box.innerText.toLowerCase();
+let data = box.getAttribute("data-key");
+
+if(nama.includes(keyword) || data.includes(keyword)){
+box.style.display="block";
+}else{
+box.style.display="none";
+}
+
+});
+
+});
+
+</script>
 </body>
 </html>
