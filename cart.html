@@ -281,12 +281,37 @@ window.location.href="bayar.html";
 
 /* ================= MAP ================= */
 
-var map=L.map('map').setView([tokoLat,tokoLng],15);
+var map = L.map('map').setView([tokoLat,tokoLng],15);
 
-L.tileLayer(
+// PETA NORMAL
+var normalLayer = L.tileLayer(
 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 {maxZoom:19}
 ).addTo(map);
+
+// SATELIT
+var satelliteLayer = L.tileLayer(
+'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+{maxZoom:19}
+);
+
+// SATELIT + NAMA TEMPAT
+var labelLayer = L.tileLayer(
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+{opacity:0.5}
+);
+
+var satelliteWithLabel = L.layerGroup([
+satelliteLayer,
+labelLayer
+]);
+
+// CONTROL PILIHAN PETA
+L.control.layers({
+"Peta Normal": normalLayer,
+"Satelit": satelliteLayer,
+"Satelit + Nama": satelliteWithLabel
+}).addTo(map);
 
 map.on('click',function(e){
 
