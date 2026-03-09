@@ -211,8 +211,11 @@ let noWa = checkoutData.noWa;
 
 let db = JSON.parse(localStorage.getItem("dbPelanggan")) || {};
 
-let trx = db[noWa] || 0;
+if(!db[noWa]){
+db[noWa] = 0;
+}
 
+let trx = db[noWa];
 let level="Member Baru";
 
 if(trx>=3) level="Member Silver";
@@ -306,7 +309,19 @@ let desa = checkoutData.desa;
 let kecamatan = checkoutData.kecamatan;
 
 let linkMaps="https://www.google.com/maps/search/?api=1&query="+lat+","+lng;
+/* UPDATE DATABASE PELANGGAN */
 
+let db = JSON.parse(localStorage.getItem("dbPelanggan")) || {};
+
+if(!db[checkoutData.noWa]){
+db[checkoutData.noWa] = 0;
+}
+
+db[checkoutData.noWa]++;
+
+localStorage.setItem("dbPelanggan", JSON.stringify(db));
+
+let trx = db[checkoutData.noWa];
 let now=new Date();
 let orderId=Date.now();
 
