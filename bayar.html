@@ -65,8 +65,16 @@ border:2px solid #16a34a;
 display:flex;
 justify-content:space-between;
 margin-top:6px;
+font-size:14px;
 }
 
+.total span:first-child{
+color:#555;
+}
+
+.total span:last-child{
+font-weight:bold;
+}
 .footer{
 position:fixed;
 bottom:0;
@@ -126,21 +134,40 @@ a.n YUDI ALIYUDIN
 
 </div></div><div class="card"><b>Ringkasan Pembayaran</b>
 
+<div class="card">
+
+<b>Ringkasan Pembayaran</b>
+
 <div class="total">
 <span>Total Barang</span>
 <span id="tBarang"></span>
-</div><div class="total">
+</div>
+
+<div class="total">
 <span>Ongkir</span>
 <span id="tOngkir"></span>
-</div><div class="total">
+</div>
+
+<div class="total">
 <span>Diskon Member</span>
 <span id="tDiskon"></span>
-</div><hr><div class="total" style="font-weight:bold;color:#ee4d2d">
+</div>
+
+<hr>
+
+<div class="total" style="font-weight:bold;color:#ee4d2d;font-size:16px">
 <span>Total Bayar</span>
 <span id="tTotal"></span>
-</div></div><div class="footer">
-<button class="btn" onclick="buatPesanan()">Buat Pesanan</button>
-</div><script>
+</div>
+
+<br>
+
+<button class="btn" onclick="buatPesanan()">
+Buat Pesanan
+</button>
+
+</div>
+<script>
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 let checkoutData = JSON.parse(localStorage.getItem("checkoutData")) || {};
