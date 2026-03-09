@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>PART HP | TOKO SIAP ANTAR</title>
 
 <style>
@@ -11,14 +12,22 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:'Segoe UI',sans-serif;
+font-family:Segoe UI;
 }
 
 body{
 background:#f4f6f9;
 }
 
-/* PRODUK GRID */
+.header{
+text-align:center;
+padding:20px;
+font-size:24px;
+font-weight:bold;
+color:#16a34a;
+}
+
+/* GRID PRODUK */
 
 .produk-container{
 display:grid;
@@ -62,14 +71,13 @@ flex:1;
 
 .produk-nama{
 font-size:13px;
-font-weight:700;
-margin-bottom:4px;
+font-weight:bold;
 }
 
 .produk-deskripsi{
 font-size:12px;
 color:#666;
-margin-bottom:6px;
+margin:4px 0;
 }
 
 .produk-harga{
@@ -80,37 +88,99 @@ margin-bottom:8px;
 }
 
 .btn-cart{
-border:none;
-background:#1faa59;
+background:#16a34a;
 color:white;
+border:none;
 padding:8px;
 border-radius:6px;
 cursor:pointer;
 }
 
-@media (min-width:900px){
-
-.produk-container{
-grid-template-columns:repeat(5,1fr);
-max-width:1400px;
+#cartFloat{
+position:fixed;
+top:20px;
+right:20px;
+background:#16a34a;
+color:white;
+padding:10px 16px;
+border-radius:50px;
+font-weight:bold;
+cursor:pointer;
+box-shadow:0 5px 15px rgba(0,0,0,0.3);
 }
 
+#cartCount{
+background:#ff9800;
+padding:3px 8px;
+border-radius:50px;
+font-size:12px;
+margin-left:5px;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<h2 style="text-align:center;margin:20px">
+<div id="cartFloat" onclick="window.location.href='cart.html'">
+🛒 Keranjang <span id="cartCount">0</span>
+</div>
+
+<div class="header">
 📱 PART HP
-</h2>
+</div>
 
 <div id="produkList" class="produk-container"></div>
 
 <script>
 
-const sheetURL="https://docs.google.com/spreadsheets/d/19AfachAS9ZyNuut61RB1wqyI_AI6BsmNT1SIWhmSIn8/gviz/tq?sheet=PART%20HP";
+function updateCartCount(){
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+let total = 0;
+
+cart.forEach(p=>{
+
+total += p.qty;
+
+});
+
+document.getElementById("cartCount").innerText = total;
+
+}
+
+updateCartCount();
+
+function tambahKeranjang(nama,harga,foto){
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+let index = cart.findIndex(p => p.nama === nama);
+
+if(index >= 0){
+
+cart[index].qty += 1;
+
+}else{
+
+cart.push({
+nama:nama,
+harga:Number(harga),
+foto:foto,
+qty:1
+});
+
+}
+
+localStorage.setItem("cart",JSON.stringify(cart));
+
+updateCartCount();
+
+alert("Produk masuk keranjang");
+
+}
 
 function convertDrive(link){
 
@@ -119,18 +189,24 @@ if(!link) return "";
 let id="";
 
 if(link.includes("id=")){
+
 id = link.split("id=")[1].split("&")[0];
+
 }
+
 else if(link.includes("/d/")){
+
 id = link.split("/d/")[1].split("/")[0];
-}
-else{
-return link;
+
 }
 
 return "https://drive.google.com/thumbnail?id="+id+"&sz=w1000";
 
 }
+
+/* AMBIL DATA GOOGLE SHEET */
+
+const sheetURL="https://docs.google.com/spreadsheets/d/19AfachAS9ZyNuut61RB1wqyI_AI6BsmNT1SIWhmSIn8/gviz/tq?sheet=PART%20HP";
 
 fetch(sheetURL)
 
@@ -158,23 +234,29 @@ html+=`
 <div class="produk-card">
 
 <div class="produk-img-box">
+
 <img src="${foto}" class="produk-img">
+
 </div>
 
 <div class="produk-info">
 
 <div class="produk-nama">${nama}</div>
 
-<div class="produk-deskripsi">
-${deskripsi ?? ""}
-</div>
+<div class="produk-deskripsi">${deskripsi ?? ""}</div>
 
 <div class="produk-harga">
+
 Rp ${Number(harga).toLocaleString()}
+
 </div>
 
-<button class="btn-cart">
+<button class="btn-cart"
+
+onclick="tambahKeranjang('${nama}','${harga}','${foto}')">
+
 + Keranjang
+
 </button>
 
 </div>
