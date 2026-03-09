@@ -171,21 +171,6 @@ Buat Pesanan
 </button>
 
 </div>
-function normalisasiWA(no){
-
-no = no.replace(/\D/g,'');
-
-if(no.startsWith("0")){
-no = "62" + no.substring(1);
-}
-
-if(no.startsWith("8")){
-no = "62" + no;
-}
-
-return no;
-
-}
 if(trx < 10){
 popupCOD(
 "COD belum tersedia.<br><br>"+
@@ -449,5 +434,25 @@ text-align:center;
 TOKO SIAP ANTAR
 </h3><p id="pesanCOD"></p><button onclick="tutupPopup()" style="background:#15803d;color:white;border:none;padding:10px 20px;border-radius:6px">
 OK
-</button></div></div></body>
+</button></div></div>
+<script>
+
+function normalisasiWA(no){
+
+no = no.replace(/\D/g,'');
+
+if(no.startsWith("0")){
+no = "62" + no.substring(1);
+}
+
+if(no.startsWith("8")){
+no = "62" + no;
+}
+
+return no;
+
+}
+
+</script>
+</body>
 </html>
