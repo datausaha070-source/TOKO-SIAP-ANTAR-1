@@ -71,31 +71,33 @@ border:1px solid #ccc;
 }
 
 .checkout{
-position:fixed;
-left:10px;
-bottom:80px;
+display:block;
+width:95%;
+margin:10px;
 background:linear-gradient(90deg,#16a34a,#f97316);
 color:white;
-padding:12px 22px;
-border-radius:40px;
-border:4px solid orange;
+padding:14px;
+border-radius:10px;
+border:none;
 font-weight:bold;
+font-size:16px;
+text-align:center;
 box-shadow:0 4px 10px rgba(0,0,0,0.2);
-z-index:999;
 }
 
 .clearBtn{
-position:fixed;
-left:10px;
-bottom:25px;
-background:#9ca3af;
+display:block;
+width:95%;
+margin:10px;
+background:#f97316;
 color:white;
-padding:12px 22px;
-border-radius:40px;
-border:4px solid orange;
+padding:14px;
+border-radius:10px;
+border:none;
 font-weight:bold;
+font-size:16px;
+text-align:center;
 box-shadow:0 4px 10px rgba(0,0,0,0.2);
-z-index:999;
 }
 
 </style>
@@ -122,9 +124,13 @@ Belum memilih lokasi
 <input type="text" id="namaPembeli" placeholder="Nama Pembeli">
 <input type="tel" id="waPembeli" placeholder="Nomor WhatsApp Aktif">
 
-<div class="checkout" onclick="lanjutBayar()">Checkout</div>
-<div class="clearBtn" onclick="kosongkan()">Kosongkan Keranjang</div>
+<button class="checkout" onclick="lanjutBayar()">
+Checkout
+</button>
 
+<button class="clearBtn" onclick="kosongkan()">
+Kosongkan Keranjang
+</button>
 <script>
 
 /* ================= DATA ================= */
@@ -242,16 +248,36 @@ location.reload();
 }
 
 /* ================= CHECKOUT ================= */
-
 function lanjutBayar(){
+if(cart.length == 0){
+popup("Keranjang masih kosong");
+return;
+}
+let totalBarang = 0;
+
+cart.forEach(p=>{
+totalBarang += p.harga * p.qty;
+});
+
+if(minimalBelanja > 0 && totalBarang < minimalBelanja){
+
+popup(
+"Minimal belanja Rp " + rupiah(minimalBelanja) +
+"<br>Tambah belanja Rp " +
+rupiah(minimalBelanja-totalBarang) + " lagi"
+);
+
+return;
+
+}
 
 if(!tujuanLat){
 popup("Pilih lokasi pengiriman dulu");
 return;
 }
 
-let namaPembeli=document.getElementById("namaPembeli").value.trim();
-let noWa=document.getElementById("waPembeli").value.trim();
+let namaPembeli = document.getElementById("namaPembeli").value.trim();
+let noWa = document.getElementById("waPembeli").value.trim();
 
 if(!namaPembeli){
 popup("Isi nama pembeli dulu");
@@ -263,19 +289,18 @@ popup("Isi nomor WhatsApp dulu");
 return;
 }
 
-localStorage.setItem("checkoutData",JSON.stringify({
-
-lat:tujuanLat,
-lng:tujuanLng,
-desa:namaDesa,
-kecamatan:namaKecamatan,
-ongkir:ongkir,
-noWa:noWa,
-namaPembeli:namaPembeli
-
+localStorage.setItem("checkoutData", JSON.stringify({
+lat: tujuanLat,
+lng: tujuanLng,
+desa: namaDesa,
+kecamatan: namaKecamatan,
+ongkir: ongkir,
+minimalBelanja: minimalBelanja,
+noWa: noWa,
+namaPembeli: namaPembeli
 }));
 
-window.location.href="bayar.html";
+window.location.href = "bayar.html";
 
 }
 
@@ -386,9 +411,13 @@ fetch(
 .then(res=>res.json())
 .then(data=>{
 
-namaDesa=data.address.village || "-";
-namaKecamatan=data.address.subdistrict || "-";
+namaDesa = data.address?.village || "-";
 
+namaKecamatan =
+data.address?.subdistrict ||
+data.address?.city_district ||
+data.address?.town ||
+"-";
 hitungOngkir();
 
 });
@@ -472,6 +501,7 @@ renderCart();
 function popup(pesan){
 
 let box=document.createElement("div");
+box.id="popupBox";
 
 box.style.position="fixed";
 box.style.top="0";
