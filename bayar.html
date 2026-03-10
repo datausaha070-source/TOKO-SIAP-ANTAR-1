@@ -87,7 +87,6 @@ font-weight:bold;
 
 /* BUTTON */
 
-
 .btn{
 width:100%;
 padding:16px;
@@ -321,9 +320,10 @@ if(m==="COD"){
 
 if(trx < 10){
 
-popupCOD(
-"COD belum tersedia.<br><br>"+
-"Belanja "+(10-trx)+" kali lagi untuk membuka COD"
+popup(
+"🚫 COD belum tersedia<br><br>"+
+"Minimal 10 transaksi untuk membuka fitur COD.<br><br>"+
+"Anda masih perlu "+(10-trx)+" transaksi lagi."
 );
 
 return;
@@ -365,7 +365,7 @@ el.classList.add("active");
 
 /* POPUP */
 
-function popupCOD(pesan){
+function popup(pesan){
 
 let box=document.createElement("div");
 
@@ -387,7 +387,10 @@ box.innerHTML=`
 
 <p>${pesan}</p>
 
-<button onclick="this.parentElement.parentElement.remove()" style="background:#15803d;color:white;border:none;padding:10px 20px;border-radius:6px">OK</button>
+<button onclick="this.parentElement.parentElement.remove()"
+style="background:#15803d;color:white;border:none;padding:10px 20px;border-radius:6px">
+OK
+</button>
 
 </div>
 `;
@@ -395,13 +398,31 @@ box.innerHTML=`
 document.body.appendChild(box);
 
 }
-
 /* BUAT PESANAN */
 
 function buatPesanan(){
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let checkoutData = JSON.parse(localStorage.getItem("checkoutData")) || {};
 
+let totalBarang = 0;
+
+cart.forEach(p=>{
+totalBarang += p.harga * p.qty;
+});
+
+let minimalBelanja = checkoutData.minimalBelanja || 0;
+
+if(minimalBelanja > 0 && totalBarang < minimalBelanja){
+
+popup(
+"Minimal belanja Rp " + minimalBelanja.toLocaleString("id-ID") +
+"<br>Tambah belanja Rp " + (minimalBelanja-totalBarang).toLocaleString("id-ID") + " lagi"
+);
+return;
+
+}
 if(!metode){
-alert("Pilih metode pembayaran dulu");
+popup("Pilih metode pembayaran dulu");
 return;
 }
 
@@ -505,14 +526,34 @@ linkMaps+"\n\n"+
 "━━━━━━━━━━━━━━━━━━━━\n"+
 infoBayar+"\n"+
 "━━━━━━━━━━━━━━━━━━━━";
+// SIMPAN RIWAYAT PESANAN
+let riwayat = JSON.parse(localStorage.getItem("riwayatPesanan")) || [];
+
+riwayat.unshift({
+id: orderId,
+tanggal: tanggal,
+jam: jam,
+total: totalBayar,
+item: totalItem,
+status: "Pesanan dibuat"
+});
+
+localStorage.setItem("riwayatPesanan", JSON.stringify(riwayat));
+
+localStorage.removeItem("cart");
+
+popup("Pesanan dibuat. Menghubungkan ke WhatsApp...");
 
 window.open(
 "https://wa.me/62895707182299?text="+encodeURIComponent(pesan),
 "_blank"
 );
 
-}
+setTimeout(()=>{
+window.location="index.html";
+},500);
 
+}
 </script>
 
 </body>
