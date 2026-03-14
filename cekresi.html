@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Cek Resi Pengiriman</title>
+<style>
+body{
+font-family:Arial;
+background:#f2f2f2;
+padding:30px;
+}
+
+.box{
+background:white;
+padding:20px;
+max-width:400px;
+margin:auto;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+input,select,button{
+width:100%;
+padding:10px;
+margin-top:10px;
+}
+
+#hasil{
+margin-top:20px;
+font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<h2>Cek Resi</h2>
+
+<select id="kurir">
+<option value="jne">JNE</option>
+<option value="jnt">J&T</option>
+<option value="sicepat">SiCepat</option>
+<option value="pos">POS</option>
+<option value="anteraja">AnterAja</option>
+</select>
+
+<input type="text" id="resi" placeholder="Masukkan nomor resi">
+
+<button onclick="cekResi()">CEK RESI</button>
+
+<div id="hasil"></div>
+
+</div>
+
+<script>
+
+function cekResi(){
+
+let resi = document.getElementById("resi").value;
+let kurir = document.getElementById("kurir").value;
+
+fetch(`https://api.binderbyte.com/v1/track?api_key=APIKEYANDA&courier=${kurir}&awb=${resi}`)
+.then(res => res.json())
+.then(data => {
+
+let hasil = data.data.history;
+
+let html = "";
+
+hasil.forEach(function(item){
+html += `<p>${item.date} - ${item.desc}</p>`;
+});
+
+document.getElementById("hasil").innerHTML = html;
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
